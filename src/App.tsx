@@ -1,24 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
+import { Routes, Route } from "react-router-dom";
 import './App.css';
+import { useAppDispatch, useAppSelector } from './app/hooks';
+import { RootState } from './app/store';
+import Cart from './features/cart/Cart';
+import ProductList from './features/shopping/ProductList';
+import { fetchAllProduct } from './features/shopping/shoppingSlice';
 
 function App() {
+  
+  const dispatch = useAppDispatch();
+
+  useEffect(()=>{
+    dispatch(fetchAllProduct());
+  }, [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="max-h-screen p-8">
+      <Routes>
+        <Route path="/shopping" element={<ProductList/>}></Route>
+        <Route path="/cart" element={<Cart/>}></Route>
+        <Route path="*" element={<ProductList />}></Route>
+      </Routes>
     </div>
   );
 }

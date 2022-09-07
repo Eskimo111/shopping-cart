@@ -1,7 +1,10 @@
 import React from 'react'
+import { useAppDispatch } from '../../app/hooks';
+import { addToCart } from '../cart/cartSlice';
 import { Product } from './shoppingSlice'
 
 const ProductItem = (props:{data:Product}) => {
+  const dispatch = useAppDispatch();
   const product = props.data;
   return (
     <div className="card font-inter">
@@ -17,7 +20,7 @@ const ProductItem = (props:{data:Product}) => {
           </div>
 
           <div className='mt-5 flex gap-2'>
-            <button className='btn-primary'>Add to cart</button>
+            <button className='btn-primary' onClick={()=>dispatch(addToCart({id:product.id, quantity:1}))}>Add to cart</button>
           </div>
         </div>
     </div>

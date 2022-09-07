@@ -22,6 +22,7 @@ export const fetchAllProduct = createAsyncThunk("shopping/getProduct",
 async () => {
     try{
     const response = await productApi.getAll();
+    //console.log(response.data);
     return response.data;
     } catch (error){
         console.error();

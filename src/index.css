@@ -16,9 +16,9 @@
     @apply font-bold text-2xl overflow-ellipsis overflow-hidden whitespace-nowrap;
   }
   .btn-primary {
-    @apply bg-slate-700 hover:bg-slate-800 text-white px-6 py-2 rounded-md font-bold;
+    @apply bg-black text-white hover:bg-white hover:text-black  border-black border py-3 rounded-full px-5;
   }
   .card-item{
-    @apply flex flex-col w-3/4 h-36 items-center bg-white rounded-lg border shadow-md md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700
+    @apply flex flex-col w-full h-44 items-center bg-white  md:flex-row   dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700
   }
 }

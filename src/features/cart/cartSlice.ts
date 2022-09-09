@@ -71,6 +71,19 @@ export const addToCart = createAsyncThunk("cart/addToCart",
         }
     })
 
+export const removeFromCart = createAsyncThunk("cart/removeFromCart",
+    async (id: string, { dispatch }) => {
+        try {
+            const cart_id = getCookie("cart_id")!;
+            const response = await cartApi.removeFromCart(id, cart_id);
+            //After add, reload cart so the navbar show number of item
+            dispatch(loadCart());
+            return response;
+        } catch (error) {
+            console.error();
+        }
+    })
+
 
 
 export const cartSlice = createSlice({

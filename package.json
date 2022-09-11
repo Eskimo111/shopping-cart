@@ -12,13 +12,8 @@
     "@types/node": "^16.11.57",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
-    "@typescript-eslint/eslint-plugin": "^5.36.2",
-    "@typescript-eslint/parser": "^5.36.2",
     "axios": "^0.27.2",
     "dotenv": "^16.0.2",
-    "eslint": "^8.23.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.7.1",
     "query-string": "^7.1.1",
     "react": "^18.2.0",
@@ -35,8 +30,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write"
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

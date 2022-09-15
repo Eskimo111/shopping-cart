@@ -11,8 +11,8 @@ const CartItemList = () => {
     <div className="basis-full md:basis-2/3">
       <h2 className="text-2xl font-bold mb-8">Cart</h2>
       <div className="flex flex-col items-baseline justify-center gap-3">
-        {lineItems.map((element) => (
-          <CartItem data={element}></CartItem>
+        {lineItems.map((element, index) => (
+          <CartItem key={index} data={element}></CartItem>
         ))}
       </div>
     </div>

@@ -9,9 +9,9 @@ const cartApi = {
     const url = `/carts/${cart_id}`;
     return axiosClient.get(url);
   },
-  addToCart: (prod_id: string, quantity: number, cart_id: string) => {
+  addToCart: (product: object, cart_id: string) => {
     const url = `/carts/${cart_id}`;
-    return axiosClient.post(url, { id: prod_id, quantity: quantity });
+    return axiosClient.post(url, product);
   },
   removeFromCart: (id: string, cart_id: string) => {
     const url = `/carts/${cart_id}/items/${id}`;

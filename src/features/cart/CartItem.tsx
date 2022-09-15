@@ -1,7 +1,8 @@
 import { produceWithPatches } from "immer";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useDelayUnmount } from "../../app/hooks";
+import Message from "../../common/message/Message";
 import {
   CartItemType,
   removeFromCartAsync,
@@ -15,19 +16,44 @@ const formatPrice = (price: number) => {
 const CartItem = (props: { data: CartItemType }) => {
   const product = props.data;
   const [quantity, setQuantity] = useState(product.quantity);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+  const [messageShow, setMessageShow] = useState(false);
+  const shouldRenderMessage = useDelayUnmount(messageShow, 1000);
+  const dispatch = useAppDispatch();
+
+  const showMessage = (message: string, type: string) => {
+    setMessage(message);
+    setMessageType(type);
+    setMessageShow(true);
+    setTimeout(() => setMessageShow(false), 2000);
+  };
 
   const handleChangeQuantity = (event: React.SyntheticEvent) => {
     let target = event.target as HTMLInputElement;
     setQuantity(Number.parseInt(target.value));
   };
   const handleSubmitQuantity = (event: React.SyntheticEvent) => {
-    dispatch(updateCartAsync({ line_id: product.id, quantity: quantity }));
+    dispatchQuantity();
     event.preventDefault();
     return false;
   };
-  const dispatch = useAppDispatch();
+
+  const dispatchQuantity = () => {
+    dispatch(updateCartAsync({ line_id: product.id, quantity: quantity }))
+      .unwrap()
+      .then(() => {
+        showMessage("Update quantity succesfully!", "success");
+      })
+      .catch(() => {
+        showMessage("Update quantity unsuccesfully!", "failed");
+      });
+  };
   return (
     <div className="card-item font-inter justify-between border-b pb-12">
+      {shouldRenderMessage && (
+        <Message showing={messageShow} type={messageType} message={message} />
+      )}
       <div className="h-full flex flex-col items-center md:flex-row md:max-w-xl gap-4">
         <div className="w-20 h-20 md:w-32 md:h-32">
           <img
@@ -46,11 +72,9 @@ const CartItem = (props: { data: CartItemType }) => {
             <div className="text-gray-600">
               Size{" "}
               <select className="h-full px-2 rounded-md divide-y border-gray-400 border">
-                <option value="1">1</option>
-                <option value="2" selected>
-                  2
+                <option value={product.selected_options[0].option_name}>
+                  {product.selected_options[0].option_name}
                 </option>
-                <option value="3">3</option>
               </select>
             </div>
             {/* Quantity Control */}
@@ -60,12 +84,7 @@ const CartItem = (props: { data: CartItemType }) => {
                   type="button"
                   onClick={() => {
                     if (quantity > 1) {
-                      dispatch(
-                        updateCartAsync({
-                          line_id: product.id,
-                          quantity: quantity - 1,
-                        })
-                      );
+                      dispatchQuantity();
                       setQuantity(quantity - 1);
                     }
                   }}
@@ -84,12 +103,7 @@ const CartItem = (props: { data: CartItemType }) => {
                 <button
                   type="button"
                   onClick={() => {
-                    dispatch(
-                      updateCartAsync({
-                        line_id: product.id,
-                        quantity: quantity + 1,
-                      })
-                    );
+                    dispatchQuantity();
                     setQuantity(quantity + 1);
                   }}
                   className="  text-black w-6 rounded-r"

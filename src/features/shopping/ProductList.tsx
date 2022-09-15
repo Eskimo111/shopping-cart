@@ -1,9 +1,11 @@
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
 import ProductItem from "../shopping/ProductItem";
+import { fetchProductById } from "./shoppingSlice";
 
 const ProductList = () => {
   const productList = useAppSelector((state: RootState) => state.shopping);
+
   return (
     <div className="flex flex-wrap items-center justify-center gap-8">
       {productList.map((element) => (

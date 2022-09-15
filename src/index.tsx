@@ -5,7 +5,7 @@ import App from "./App";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import "./index.css";
-import NavBar from "./features/navbar/NavBar";
+import NavBar from "./common/navbar/NavBar";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

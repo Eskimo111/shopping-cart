@@ -13,6 +13,7 @@ export interface CartItemType extends Product {
     formatted: string;
   };
   line_total: { raw: number; formatted: string };
+  selected_options: [{ group_name: string; option_name: string }];
 }
 
 type Cart = {
@@ -69,10 +70,24 @@ export const createCartAsync = createAsyncThunk("cart/create", async () => {
 
 export const addToCartAsync = createAsyncThunk(
   "cart/addToCart",
-  async (input: { id: string; quantity: number }, { dispatch }) => {
+  async (
+    input: {
+      id: string;
+      quantity: number;
+      variant_id: string;
+      option_id: string;
+    },
+    { dispatch }
+  ) => {
     try {
       const id = getCookie("cart_id")!;
-      const response = await cartApi.addToCart(input.id, input.quantity, id);
+      const formattedInput = {
+        id: input.id,
+        quantity: input.quantity,
+        options: { [input.variant_id]: input.option_id },
+      };
+      console.log(formattedInput);
+      const response = await cartApi.addToCart(formattedInput, id);
       dispatch(loadCart(response));
       return response;
     } catch (error) {
@@ -135,7 +150,6 @@ export const cartSlice = createSlice({
         subtotal,
         currency,
       }: Cart = action.payload as any;
-      console.log(action.payload);
       state.length = 0;
       state.push({
         id,
@@ -189,7 +203,7 @@ export const cartSlice = createSlice({
           subtotal,
           currency,
         });
-        console.log("load cookie cart");
+        console.log("load cookie cart: " + id);
       });
   },
 });

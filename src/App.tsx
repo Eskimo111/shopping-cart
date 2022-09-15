@@ -13,10 +13,13 @@ import {
 } from "./features/shopping/shoppingSlice";
 import ProductPage from "./features/shopping/product_page/ProductPage";
 import SearchPage from "./features/shopping/search_page/SearchPage";
+import Shopping from "./features/shopping/Shopping";
+import LoginPage from "./features/user/loginpage/LoginPage";
 
 function App() {
   const dispatch = useAppDispatch();
   console.log("App rendered");
+  console.log(window.location.pathname);
   useEffect(() => {
     dispatch(fetchAllProduct())
       .unwrap()
@@ -36,16 +39,18 @@ function App() {
     }
   }, []);
   return (
-    <div className="max-h-screen p-8 pt-20">
+    <div className="max-h-screen pt-12">
       <Routes>
-        <Route path="/shopping" element={<ProductList />}></Route>
+        <Route path="/shopping" element={<Shopping />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/product" element={<ProductPage />}>
           <Route index element={<div>Not found</div>}></Route>
           <Route path=":productId" element={<ProductPage />}></Route>
         </Route>
         <Route path="/search" element={<SearchPage />}></Route>
-        <Route path="*" element={<ProductList />}></Route>
+        <Route path="/login" element={<LoginPage />}></Route>
+        <Route path="/user/:token" element={<LoginPage />}></Route>
+        <Route path="*" element={<Shopping />}></Route>
       </Routes>
     </div>
   );

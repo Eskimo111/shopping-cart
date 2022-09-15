@@ -47,7 +47,7 @@ export const fetchProductSize = createAsyncThunk(
   async (empty: string, { getState, dispatch }) => {
     const productList = (getState() as RootState).shopping;
     try {
-      productList.map((element: Product) => {
+      productList.forEach((element) => {
         //console.log(element.id);
         dispatch(fetchProductById(element.id));
       });
@@ -85,9 +85,9 @@ export const shoppingSlice = createSlice({
         console.log("Fetch all product!");
       })
       .addCase(fetchProductById.fulfilled, (state, action) => {
-        const product = <Product>(action.payload as any);
-        if (state.length != 0) {
-          state.map((element: Product, index) => {
+        const product = action.payload as any as Product;
+        if (state.length !== 0) {
+          state.forEach((element: Product, index) => {
             if (element.id === product.id) {
               if (product.variant_groups[0])
                 state[index].variant_groups.push(product.variant_groups[0]);

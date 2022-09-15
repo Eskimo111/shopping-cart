@@ -6,10 +6,10 @@ module.exports = {
       fontFamily: {
         inter: ["Inter", "sans-serif"],
       },
-      spacing:{
-        "22": "5.5rem"
-      }
+      spacing: {
+        22: "5.5rem",
+      },
     },
   },
-  plugins: [],
+  plugins: [require("tw-elements/dist/plugin")],
 };

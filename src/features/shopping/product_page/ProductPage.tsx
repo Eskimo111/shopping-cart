@@ -18,6 +18,7 @@ const emptyProduct = {
     url: "",
   },
   description: "",
+  status: false,
   price: {
     raw: 0,
     formatted: "",

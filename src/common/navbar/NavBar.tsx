@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
 import { BiUser } from "react-icons/bi";
+import { GrUserManager } from "react-icons/gr";
 
 const NavBar = () => {
   const [searchString, setSearchString] = useState("");
@@ -51,21 +52,24 @@ const NavBar = () => {
               type="text"
               id="search-navbar"
               className="block p-1.5 pl-10 w-48 md:w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-sm focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Search..."
+              placeholder="Search for products.."
               onChange={(e) => handleInputChange(e)}
               value={searchString}
             />
           </div>
         </form>
-        <div className="flex md:order-1 items-center justify-end gap-0">
+        <div className="flex md:order-1 items-center justify-end gap-2">
+          <Link to="/owner" className="text-white">
+            For owner
+          </Link>
           <Link to="/cart">
             <div className="relative m-2">
               <svg width="24px" height="24px" fill="#fff" viewBox="0 0 24 24">
                 <path d="M16 7a1 1 0 0 1-1-1V3H9v3a1 1 0 0 1-2 0V3a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1z"></path>
                 <path d="M20 5H4a2 2 0 0 0-2 2v13a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a2 2 0 0 0-2-2zm0 15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7h16z"></path>
               </svg>
-              <span className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2  top-1/2 text-center text-xs font-semibold">
-                {cartSize}
+              <span className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 top-1/2 text-center text-xs ">
+                {cartSize < 10 ? cartSize : "10+"}
               </span>
             </div>
           </Link>

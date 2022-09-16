@@ -8,7 +8,7 @@ const CartItemList = () => {
     (state: RootState) => state.cart[0].line_items
   );
   return (
-    <div className="basis-full md:basis-2/3">
+    <div className="basis-full md:basis-2/3 pt-8">
       <h2 className="text-2xl font-bold mb-8">Cart</h2>
       <div className="flex flex-col items-baseline justify-center gap-3">
         {lineItems.map((element, index) => (

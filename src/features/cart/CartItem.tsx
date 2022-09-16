@@ -34,12 +34,12 @@ const CartItem = (props: { data: CartItemType }) => {
     setQuantity(Number.parseInt(target.value));
   };
   const handleSubmitQuantity = (event: React.SyntheticEvent) => {
-    dispatchQuantity();
+    dispatchQuantity(quantity);
     event.preventDefault();
     return false;
   };
 
-  const dispatchQuantity = () => {
+  const dispatchQuantity = (quantity: number) => {
     dispatch(updateCartAsync({ line_id: product.id, quantity: quantity }))
       .unwrap()
       .then(() => {
@@ -84,7 +84,7 @@ const CartItem = (props: { data: CartItemType }) => {
                   type="button"
                   onClick={() => {
                     if (quantity > 1) {
-                      dispatchQuantity();
+                      dispatchQuantity(quantity - 1);
                       setQuantity(quantity - 1);
                     }
                   }}
@@ -103,7 +103,7 @@ const CartItem = (props: { data: CartItemType }) => {
                 <button
                   type="button"
                   onClick={() => {
-                    dispatchQuantity();
+                    dispatchQuantity(quantity + 1);
                     setQuantity(quantity + 1);
                   }}
                   className="  text-black w-6 rounded-r"

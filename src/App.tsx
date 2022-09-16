@@ -5,21 +5,21 @@ import { getCookie } from "./app/cookie";
 import { useAppDispatch } from "./app/hooks";
 import Cart from "./features/cart/Cart";
 import { createCartAsync, loadCartAsync } from "./features/cart/cartSlice";
-import NavBar from "./common/navbar/NavBar";
-import ProductList from "./features/shopping/ProductList";
-import {
-  fetchAllProduct,
-  fetchProductSize,
-} from "./features/shopping/shoppingSlice";
+import { fetchAllProduct } from "./features/shopping/shoppingSlice";
 import ProductPage from "./features/shopping/product_page/ProductPage";
 import SearchPage from "./features/shopping/search_page/SearchPage";
 import Shopping from "./features/shopping/Shopping";
 import LoginPage from "./features/user/loginpage/LoginPage";
+import OwnerPage from "./features/owner/OwnerPage";
+import ManageProduct from "./features/owner/owner_products/ManageProductPage";
+import ManageProductPage from "./features/owner/owner_products/ManageProductPage";
+import OwnerProductPage from "./features/owner/owner_products/OwnerProductPage";
 
 function App() {
   const dispatch = useAppDispatch();
   console.log("App rendered");
   console.log(window.location.pathname);
+
   useEffect(() => {
     dispatch(fetchAllProduct())
       .unwrap()
@@ -50,6 +50,13 @@ function App() {
         <Route path="/search" element={<SearchPage />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
         <Route path="/user/:token" element={<LoginPage />}></Route>
+        <Route path="/owner">
+          <Route index element={<OwnerPage />}></Route>
+          <Route path="products">
+            <Route index element={<ManageProductPage />}></Route>
+            <Route path=":productId" element={<OwnerProductPage />}></Route>
+          </Route>
+        </Route>
         <Route path="*" element={<Shopping />}></Route>
       </Routes>
     </div>

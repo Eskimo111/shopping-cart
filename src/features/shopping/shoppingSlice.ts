@@ -17,6 +17,7 @@ export interface Product {
   id: string;
   name: string;
   description: string;
+  status: boolean;
   price: {
     raw: number;
     formatted: string;

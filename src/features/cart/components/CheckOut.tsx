@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useAppSelector } from "../../app/hooks";
-import { RootState } from "../../app/store";
+import { useAppSelector } from "../../../app/hooks";
+import { RootState } from "../../../app/store";
 
 const formatPrice = (price: number) => {
   return price.toLocaleString("vi", { style: "currency", currency: "VND" });

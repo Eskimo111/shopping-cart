@@ -2,35 +2,36 @@ import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { getCookie } from "./app/cookie";
-import { useAppDispatch } from "./app/hooks";
-import Cart from "./features/cart/Cart";
+import { useAppDispatch, useAppSelector } from "./app/hooks";
+import Cart from "./features/cart";
 import { createCartAsync, loadCartAsync } from "./features/cart/cartSlice";
-import { fetchAllProduct } from "./features/shopping/shoppingSlice";
-import ProductPage from "./features/shopping/product_page/ProductPage";
-import SearchPage from "./features/shopping/search_page/SearchPage";
-import Shopping from "./features/shopping/Shopping";
+import ProductPage from "./features/shopping/pages/product_page";
+import SearchPage from "./features/shopping/pages/search_page";
+import Shopping from "./features/shopping";
 import LoginPage from "./features/user/loginpage/LoginPage";
-import OwnerPage from "./features/owner/OwnerPage";
-import ManageProduct from "./features/owner/owner_products/ManageProductPage";
-import ManageProductPage from "./features/owner/owner_products/ManageProductPage";
-import OwnerProductPage from "./features/owner/owner_products/OwnerProductPage";
+import OwnerPage from "./features/owner";
+import ManageProduct from "./features/owner/owner_products";
+import ManageProductPage from "./features/owner/owner_products";
+import OwnerProductPage from "./features/owner/owner_products/pages/edit-product";
+import {
+  fetchAllProduct,
+  fetchProductByPage,
+} from "./features/shopping/productsSlice";
+import Construct from "./common/construct/Construct";
+import { RootState } from "./app/store";
 
 function App() {
   const dispatch = useAppDispatch();
   console.log("App rendered");
   console.log(window.location.pathname);
-
+  const pagination = useAppSelector((state: RootState) => state.pagination);
   useEffect(() => {
-    dispatch(fetchAllProduct())
+    dispatch(fetchProductByPage({ page: 1, limit: pagination.per_page }))
       .unwrap()
       .then(() => {
-        console.log("Fetch all products success!");
-      }); /*
-        dispatch(fetchProductSize(""))
-          .unwrap()
-          .then(() => console.log("Fetch size success!"));
-      })
-      .catch(() => console.log("Fetch all products fails!"));*/
+        console.log(`Fetch page products success!`);
+      });
+    window.scrollTo(0, 0);
     if (getCookie("cart_id")) {
       console.log("loadAsync");
       dispatch(loadCartAsync());
@@ -56,6 +57,7 @@ function App() {
             <Route index element={<ManageProductPage />}></Route>
             <Route path=":productId" element={<OwnerProductPage />}></Route>
           </Route>
+          <Route path="*" element={<Construct />}></Route>
         </Route>
         <Route path="*" element={<Shopping />}></Route>
       </Routes>

@@ -1,10 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
-import shoppingReducer from "../features/shopping/shoppingSlice";
+import productsReducer from "../features/shopping/productsSlice";
 import cartReducer from "../features/cart/cartSlice";
 import userReducer from "../features/user/userSlice";
+import paginationReducer from "../features/pagination/paginationSlice";
+import filterReducer from "../features/filter-product/filterSlice";
 
 export const store = configureStore({
-  reducer: { shopping: shoppingReducer, cart: cartReducer, user: userReducer },
+  reducer: {
+    products: productsReducer,
+    cart: cartReducer,
+    user: userReducer,
+    pagination: paginationReducer,
+    filter: filterReducer,
+  },
 });
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;

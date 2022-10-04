@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import productApi from "../../api/productApi";
-import userApi from "../../api/userApi";
+
+import userApi from "../../api/user_api/userApi";
 import { RootState } from "../../app/store";
 
 export interface User {
@@ -11,12 +11,15 @@ export interface User {
   phone: string;
 }
 
-const initialState: User = {
-  id: "",
-  firstname: "",
-  lastname: "",
-  email: "",
-  phone: "",
+const initialState = {
+  isLogin: false,
+  user: {
+    id: "",
+    firstname: "",
+    lastname: "",
+    email: "",
+    phone: "",
+  },
 };
 
 const BASE_URL = "http://localhost:3000/users/:token:";
@@ -24,7 +27,6 @@ const BASE_URL = "http://localhost:3000/users/:token:";
 export const sendMagicEmail = createAsyncThunk(
   "user/sendEmail",
   async (email: string) => {
-    console.log(email);
     const response = await userApi.sendEmail({
       email: email,
       base_url: BASE_URL,

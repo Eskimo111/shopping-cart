@@ -1,6 +1,7 @@
 import React from "react";
-import { useAppSelector } from "../../app/hooks";
-import { RootState } from "../../app/store";
+import { useAppSelector } from "../../../app/hooks";
+import { RootState } from "../../../app/store";
+
 import CartItem from "./CartItem";
 
 const CartItemList = () => {

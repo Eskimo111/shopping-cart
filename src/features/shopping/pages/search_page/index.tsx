@@ -1,13 +1,13 @@
 import { useSearchParams } from "react-router-dom";
-import { useAppSelector } from "../../../app/hooks";
-import { RootState } from "../../../app/store";
-import ProductItem from "../ProductItem";
+import { useAppSelector } from "../../../../app/hooks";
+import { RootState } from "../../../../app/store";
+import ProductItem from "../../components/ProductItem";
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams();
   let searchString = searchParams.get("search");
   if (!searchString) searchString = "";
-  const productList = useAppSelector((state: RootState) => state.shopping);
+  const productList = useAppSelector((state: RootState) => state.products);
   const searchResult = productList.filter((product) =>
     product.name.toLowerCase().includes(searchString!.toLowerCase())
   );

@@ -39,22 +39,39 @@ const Banner = () => {
         <div className="carousel-item active relative float-left w-full">
           <img src={img1} className="block w-full" alt="..." />
           <div className="carousel-caption hidden md:block absolute text-center">
-            <h5 className="text-xl">First slide label</h5>
-            <p>Some representative placeholder content for the first slide.</p>
+            <h5 className="text-xl text-white">
+              Stepback & Create: Fitting in is boring
+            </h5>
+            <p>
+              People who can see their potential, and know what they’re capable
+              of, do great things. And while achieving individual and collective
+              greatness can be challenging, we know that, together, we can do
+              it.
+            </p>
           </div>
         </div>
         <div className="carousel-item relative float-left w-full">
           <img src={img2} className="block w-full" alt="..." />
           <div className="carousel-caption hidden md:block absolute text-center">
-            <h5 className="text-xl">Second slide label</h5>
-            <p>Some representative placeholder content for the second slide.</p>
+            <h5 className="text-xl text-white">
+              Air Max Scorpion:A new age of air
+            </h5>
+            <p>
+              Introducing a radical system for Air units, moving from simple
+              forms into complex new geometries for a unique underfoot
+              sensation.
+            </p>
           </div>
         </div>
         <div className="carousel-item relative float-left w-full">
           <img src={img3} className="block w-full" alt="..." />
           <div className="carousel-caption hidden md:block absolute text-center">
-            <h5 className="text-xl">Third slide label</h5>
-            <p>Some representative placeholder content for the third slide.</p>
+            <h5 className="text-xl text-white">Nike forward</h5>
+            <p>
+              It’s game-changing platforms, like Nike Forward, that accelerate a
+              culture of innovation at Nike to help protect the planet and the
+              future of sport.
+            </p>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import axiosClient from "./axiosClient";
+import axiosClient from "../axiosClient";
 
 const userApi = {
   sendEmail: (input: { email: string; base_url: string }) => {

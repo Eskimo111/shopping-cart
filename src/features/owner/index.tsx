@@ -13,7 +13,7 @@ const OwnerPage = () => {
         to="/owner/products"
         className="flex flex-col w-1/4 justify-center transition-all duration-500 hover:-translate-y-1 hover:shadow-xl shadow-md rounded-lg cursor-pointer "
       >
-        <div className="p-16 flex justify-center items-center font-bold text-2xl bg-gray-800 text-white rounded-t-lg">
+        <div className="p-16 flex justify-center items-center font-bold text-2xl bg-gray-100 rounded-t-lg">
           <GiRunningShoe size={40} />
         </div>
         <div className="basis-11/12 flex flex-col py-3 px-4 text-black bg-white rounded-b-lg border border-bl">
@@ -25,8 +25,8 @@ const OwnerPage = () => {
         to="/owner/assets"
         className="flex flex-col w-1/4 justify-center transition-all duration-500 hover:-translate-y-1 hover:shadow-xl shadow-md rounded-lg cursor-pointer "
       >
-        <div className="p-16 flex justify-center items-center font-bold text-2xl bg-gray-800 text-white rounded-t-lg">
-          <GrResources id="asset-icon" size={40} />
+        <div className="p-16 flex justify-center items-center font-bold text-2xl bg-gray-100 rounded-t-lg">
+          <GrResources id="" size={40} />
         </div>
         <div className="basis-11/12 flex flex-col py-3 px-4 text-black bg-white rounded-b-lg border border-bl">
           <h3 className="text-lg font-semibold "> Manage Assets</h3>

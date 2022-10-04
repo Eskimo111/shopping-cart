@@ -1,9 +1,8 @@
 import React from "react";
 import { useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
-import CartItem from "./CartItem";
-import CartItemList from "./CartItemList";
-import CheckOut from "./CheckOut";
+import CartItemList from "./components/CartItemList";
+import CheckOut from "./components/CheckOut";
 
 const Cart = () => {
   const lineItems = useAppSelector(

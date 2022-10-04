@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import cartApi from "../../api/cartApi";
+import cartApi from "../../api/user_api/cartApi";
+
 import { getCookie, setCookie } from "../../app/cookie";
-import { Product } from "../shopping/shoppingSlice";
+import { Product } from "../shopping/productsSlice";
 
 export interface CartItemType extends Product {
   id: string;

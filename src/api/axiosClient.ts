@@ -4,7 +4,7 @@ import queryString from "query-string";
 const headers: Readonly<Record<string, string | boolean>> = {
   Accept: "application/json",
   "Content-Type": "application/json; charset=utf-8",
-  "X-Authorization": "pk_test_46647c7cc96afa71e31bd1cecb6e48a69a1b749bfdbde",
+  "X-Authorization": process.env.REACT_APP_PUBLIC_KEY!,
 };
 
 const axiosClient = axios.create({

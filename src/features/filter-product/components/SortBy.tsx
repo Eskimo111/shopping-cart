@@ -1,7 +1,7 @@
 import React from "react";
 import { Select } from "antd";
 import { BiChevronDown } from "react-icons/bi";
-import "./SortBy.css";
+import "./SortBy.less";
 
 const { Option } = Select;
 

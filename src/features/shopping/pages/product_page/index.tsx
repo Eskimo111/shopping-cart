@@ -61,7 +61,6 @@ const ProductPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    console.log("use effect");
     fetchProductById(productId!).then((result) => {
       setProduct(result as any);
       setLoading(false);

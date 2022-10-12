@@ -8,7 +8,7 @@ const formatPrice = (price: number) => {
 
 const CheckOut = () => {
   const subtotal = useAppSelector(
-    (state: RootState) => state.cart[0].subtotal.raw
+    (state: RootState) => state.cart.subtotal.raw
   );
   const [discount, setDiscount] = useState(0);
   return (

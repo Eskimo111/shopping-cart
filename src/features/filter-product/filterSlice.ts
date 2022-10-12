@@ -43,9 +43,12 @@ export const filterSlice = createSlice({
         state.price = action.payload;
       }
     },
-    setSortBy: (state, action) => {
-      state.sortBy = action.payload;
-    },
+    setSortBy: (state, { payload }) => ({
+      ...state,
+      sortBy: payload.sortBy !== "" ? payload.sortBy : undefined,
+      sortDirection:
+        payload.sortDirection !== "" ? payload.sortDirection : undefined,
+    }),
     setSortDirection: (state, action) => {
       state.sortDirection = action.payload;
     },

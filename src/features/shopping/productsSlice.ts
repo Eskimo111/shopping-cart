@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import productApi from "../../api/user_api/productApi";
-import ownerProductApi from "../../api/owner_api/productApi";
-import { RootState } from "../../app/store";
+import productApi from "../../utils/customer_services/product.service";
+import ownerProductApi from "../../utils/owner_services/productApi";
 import { setPagination } from "../pagination/paginationSlice";
 import { Filter } from "../filter-product/filterSlice";
 

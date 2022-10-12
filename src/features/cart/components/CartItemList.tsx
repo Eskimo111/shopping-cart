@@ -5,9 +5,7 @@ import { RootState } from "../../../app/store";
 import CartItem from "./CartItem";
 
 const CartItemList = () => {
-  const lineItems = useAppSelector(
-    (state: RootState) => state.cart[0].line_items
-  );
+  const lineItems = useAppSelector((state: RootState) => state.cart.line_items);
   return (
     <div className="basis-full md:basis-2/3 pt-8">
       <h2 className="text-2xl font-bold mb-8">Cart</h2>

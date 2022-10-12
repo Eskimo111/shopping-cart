@@ -1,15 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Select } from "antd";
 import { BiChevronDown } from "react-icons/bi";
 import "./SortBy.less";
+import { useAppDispatch } from "../../../app/hooks";
+import { setSortBy, setSortDirection } from "../filterSlice";
 
 const { Option } = Select;
 
-const handleChange = (value: string) => {
-  console.log(`selected ${value}`);
-};
-
 const SortBy = () => {
+  const dispatch = useAppDispatch();
+  const [direction, setDirection] = useState("");
+  const [sortField, setSortField] = useState("");
+
+  useEffect(() => {
+    if (sortField !== "")
+      dispatch(setSortBy({ sortBy: sortField, sortDirection: direction }));
+  }, [direction, sortField]);
+
+  const handleChange = (value: string) => {
+    if (!value) {
+      setSortField("");
+      setDirection("");
+    }
+    setSortField(value.split("_")[0]);
+    setDirection(value.split("_")[1]);
+  };
+
+  const handleClear = () => {
+    dispatch(setSortBy({ sortBy: undefined, sortDirection: undefined }));
+  };
+
   return (
     <Select
       className="sort-by"
@@ -18,9 +38,10 @@ const SortBy = () => {
       allowClear
       placeholder="Sort by"
       bordered={false}
+      onClear={handleClear}
     >
-      <Option value="priceasc">Price: Low-High</Option>
-      <Option value="pricedesc">Price: High-Low</Option>
+      <Option value="price_asc">Price: Low-High</Option>
+      <Option value="price_desc">Price: High-Low</Option>
     </Select>
   );
 };

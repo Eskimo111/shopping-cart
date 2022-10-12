@@ -1,10 +1,10 @@
 import axiosClient from "../axiosClient";
 
-const userApi = {
+const userService = {
   sendEmail: (input: { email: string; base_url: string }) => {
     const url = "/customers/email-token";
     return axiosClient.post(url, input);
   },
 };
 
-export default userApi;
+export default userService;

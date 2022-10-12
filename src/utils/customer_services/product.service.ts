@@ -1,7 +1,7 @@
 import axiosClient from "../axiosClient";
 import queryString from "query-string";
 
-const productApi = {
+const productService = {
   getAll: () => {
     const url = "/products";
     return axiosClient.get(url);
@@ -20,6 +20,7 @@ const productApi = {
     return axiosClient.get(url);
   },
   getWithFilter: (input: any) => {
+    const { category_slug } = input;
     const query = queryString.stringify(input);
     console.log(query);
     const url = `/products?${query}`;
@@ -27,4 +28,4 @@ const productApi = {
   },
 };
 
-export default productApi;
+export default productService;

@@ -3,14 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
 import { BiUser } from "react-icons/bi";
-import { GrUserManager } from "react-icons/gr";
-
 const NavBar = () => {
   const [searchString, setSearchString] = useState("");
   const navigate = useNavigate();
-  const cartSize = useAppSelector(
-    (state: RootState) => state.cart[0].total_items
-  );
+  const cartSize = useAppSelector((state: RootState) => state.cart.total_items);
 
   const handleInputChange = (event: React.SyntheticEvent) => {
     let target = event.target as HTMLInputElement;

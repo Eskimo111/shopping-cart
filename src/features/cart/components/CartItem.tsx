@@ -91,11 +91,6 @@ const CartItem = (props: { data: CartItemType }) => {
                 {/* Size Drop Down */}
                 <div className="text-gray-600">
                   Size {product.selected_options[0].option_name}
-                  {/*<select className="h-full px-2 rounded-md divide-y border-gray-400 border">
-                <option value={product.selected_options[0].option_name}>
-                  {product.selected_options[0].option_name}
-                </option>
-      </select>*/}
                 </div>
                 {/* Quantity Control */}
                 <div className="border bg-white border-gray-400 rounded-md">
@@ -139,7 +134,19 @@ const CartItem = (props: { data: CartItemType }) => {
             <span>{formatPrice(product.line_total.raw)}</span>
             <div
               className="cursor-pointer"
-              onClick={() => dispatch(removeFromCartAsync(product.id))}
+              onClick={() => {
+                setLoading(true);
+                dispatch(removeFromCartAsync(product.id))
+                  .unwrap()
+                  .then(() => {
+                    setLoading(false);
+                    showMessage("Item(s) removed.", "failed");
+                  })
+                  .catch(() => {
+                    setLoading(false);
+                    showMessage("Error. Try again.", "failed");
+                  });
+              }}
             >
               <svg
                 aria-hidden="true"

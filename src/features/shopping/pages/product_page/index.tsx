@@ -1,7 +1,7 @@
 import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import productApi from "../../../../api/user_api/productApi";
+import productApi from "../../../../utils/customer_services/product.service";
 import {
   useAppDispatch,
   useAppSelector,

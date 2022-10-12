@@ -1,6 +1,6 @@
 import axiosClient from "../axiosClient";
 
-const cartApi = {
+const cartService = {
   createNewCart: () => {
     const url = "/carts";
     return axiosClient.get(url);
@@ -23,4 +23,4 @@ const cartApi = {
   },
 };
 
-export default cartApi;
+export default cartService;

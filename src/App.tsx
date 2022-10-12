@@ -54,8 +54,8 @@ function App() {
         <Route path="/owner">
           <Route index element={<OwnerPage />}></Route>
           <Route path="products">
-            <Route index element={<ManageProductPage />}></Route>
-            <Route path=":productId" element={<OwnerProductPage />}></Route>
+            <Route index element={<Construct />}></Route>
+            <Route path=":productId" element={<Construct />}></Route>
           </Route>
           <Route path="*" element={<Construct />}></Route>
         </Route>

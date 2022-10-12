@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import productApi from "../../api/user_api/productApi";
-import ownerProductApi from "../../api/owner_api/productApi";
+import productApi from "../../utils/customer_services/product.service";
+import ownerProductApi from "../../utils/owner_services/productApi";
 import { RootState } from "../../app/store";
 
 export interface Pagination {

@@ -2,7 +2,7 @@ import { Checkbox } from "antd";
 import { CheckboxValueType } from "antd/lib/checkbox/Group";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import categoryApi from "../../../api/user_api/categoryApi";
+import categoryApi from "../../../utils/customer_services/category.service";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { RootState } from "../../../app/store";
 import { setCategory } from "../filterSlice";

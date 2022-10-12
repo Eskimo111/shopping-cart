@@ -1,5 +1,10 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import cartApi from "../../api/user_api/cartApi";
+import {
+  CaseReducer,
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
+import cartApi from "../../utils/customer_services/cart.service";
 
 import { getCookie, setCookie } from "../../app/cookie";
 import { Product } from "../shopping/productsSlice";
@@ -17,7 +22,7 @@ export interface CartItemType extends Product {
   selected_options: [{ group_name: string; option_name: string }];
 }
 
-type Cart = {
+export interface Cart {
   id: string;
   line_items: CartItemType[];
   total_items: number;
@@ -30,44 +35,38 @@ type Cart = {
     code: string;
     symbol: string;
   };
-};
+}
 
-const initialState: Cart[] = [
-  {
-    id: "",
-    line_items: [],
-    total_items: 0,
-    total_unique_items: 0,
-    subtotal: {
-      raw: 0,
-      formatted: "",
-    },
-    currency: {
-      code: "",
-      symbol: "",
-    },
+const initialState: Cart = {
+  id: "",
+  line_items: [],
+  total_items: 0,
+  total_unique_items: 0,
+  subtotal: {
+    raw: 0,
+    formatted: "",
   },
-];
-
-export const loadCartAsync = createAsyncThunk("cart/load", async () => {
-  try {
+  currency: {
+    code: "",
+    symbol: "",
+  },
+};
+export const loadCartAsync = createAsyncThunk(
+  "cart/load",
+  async (): Promise<Cart> => {
     const id = getCookie("cart_id")!;
     const response = await cartApi.loadCart(id);
-    //dispatch(loadCart(response));
-    return response;
-  } catch (error) {
-    console.error();
+    return response as any as Cart;
   }
-});
+);
 
-export const createCartAsync = createAsyncThunk("cart/create", async () => {
-  try {
+export const createCartAsync = createAsyncThunk(
+  "cart/create",
+  async (): Promise<Cart> => {
     const response = await cartApi.createNewCart();
-    return response;
-  } catch (error) {
-    console.error();
+    return response as any as Cart;
   }
-});
+);
 
 export const addToCartAsync = createAsyncThunk(
   "cart/addToCart",
@@ -87,7 +86,6 @@ export const addToCartAsync = createAsyncThunk(
         quantity: input.quantity,
         options: { [input.variant_id]: input.option_id },
       };
-      console.log(formattedInput);
       const response = await cartApi.addToCart(formattedInput, id);
       dispatch(loadCart(response));
       return response;
@@ -130,81 +128,39 @@ export const updateCartAsync = createAsyncThunk(
     }
   }
 );
+type CR<T> = CaseReducer<Cart, PayloadAction<T>>;
 
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action) => {
-      state[0].line_items.map((product, index) => {
-        if (product.id === action.payload?.id) {
-          state[0].line_items[index].quantity += action.payload?.quantity;
-        }
-      });
-    },
-    loadCart: (state, action) => {
-      const {
-        id,
-        line_items,
-        total_items,
-        total_unique_items,
-        subtotal,
-        currency,
-      }: Cart = action.payload as any;
-      state.length = 0;
-      state.push({
-        id,
-        line_items,
-        total_items,
-        total_unique_items,
-        subtotal,
-        currency,
-      });
-      console.log("load:" + id);
-    },
+    addToCart: (state, { payload }): Cart => ({
+      ...state,
+      line_items: state.line_items.map((product) =>
+        product.id === payload.id
+          ? {
+              ...product,
+              quantity: product.quantity + payload.quantity,
+            }
+          : product
+      ),
+    }),
+    loadCart: (state, action): Cart => ({
+      ...action.payload,
+    }),
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createCartAsync.fulfilled, (state, action) => {
-        const {
-          id,
-          line_items,
-          total_items,
-          total_unique_items,
-          subtotal,
-          currency,
-        }: Cart = action.payload as any;
-        state.length = 0;
-        state.push({
-          id,
-          line_items,
-          total_items,
-          total_unique_items,
-          subtotal,
-          currency,
-        });
+      .addCase(createCartAsync.fulfilled, (state, { payload }) => {
+        const { id } = payload;
         setCookie("cart_id", id, 30);
         console.log("create new cart");
+        return { ...payload };
       })
-      .addCase(loadCartAsync.fulfilled, (state, action) => {
-        const {
-          id,
-          line_items,
-          total_items,
-          total_unique_items,
-          subtotal,
-          currency,
-        }: Cart = action.payload as any;
-        state.length = 0;
-        state.push({
-          id,
-          line_items,
-          total_items,
-          total_unique_items,
-          subtotal,
-          currency,
-        });
+      .addCase(loadCartAsync.fulfilled, (state, { payload }) => {
+        const { id } = payload;
         console.log("load cookie cart: " + id);
+        return { ...payload };
       });
   },
 });

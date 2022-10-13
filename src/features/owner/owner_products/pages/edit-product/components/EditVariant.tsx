@@ -1,5 +1,5 @@
 import React from "react";
-import { Product } from "../../../../../shopping/productsSlice";
+import { Product } from "../../../../../../slices/products";
 import "tw-elements";
 import TagInput from "../../../../../../common/tag_input/TagInput";
 import { BiDotsHorizontalRounded } from "react-icons/bi";

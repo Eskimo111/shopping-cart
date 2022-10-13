@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../../app/hooks";
-import { fetchProductById, Product } from "../../../shopping/productsSlice";
+import { fetchProductById, Product } from "../../../../slices/products";
 
 const OwnerProductItem = (props: { data: Product }) => {
   const dispatch = useAppDispatch();

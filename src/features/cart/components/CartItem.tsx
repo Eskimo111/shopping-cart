@@ -8,7 +8,7 @@ import {
   CartItemType,
   removeFromCartAsync,
   updateCartAsync,
-} from "../cartSlice";
+} from "../../../slices/cart";
 
 const formatPrice = (price: number) => {
   return price.toLocaleString("vi", { style: "currency", currency: "VND" });

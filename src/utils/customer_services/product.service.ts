@@ -20,7 +20,6 @@ const productService = {
     return axiosClient.get(url);
   },
   getWithFilter: (input: any) => {
-    const { category_slug } = input;
     const query = queryString.stringify(input);
     console.log(query);
     const url = `/products?${query}`;

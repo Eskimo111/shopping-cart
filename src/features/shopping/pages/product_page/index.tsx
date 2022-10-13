@@ -9,10 +9,11 @@ import {
 } from "../../../../app/hooks";
 import LoadingSpinner from "../../../../common/loading-spinner/LoadingSpinner";
 import Message from "../../../../common/message/Message";
-import { addToCartAsync } from "../../../cart/cartSlice";
+import { addToCartAsync } from "../../../../slices/cart";
 import ProductNotFound from "./ProductNotFound";
+import { Product } from "../../../../slices/products";
 
-const emptyProduct = {
+const emptyProduct: Product = {
   id: "",
   name: "",
   image: {
@@ -37,6 +38,7 @@ const emptyProduct = {
       ],
     },
   ],
+  categories: [],
 };
 
 const fetchProductById = async (productId: string) => {
@@ -99,7 +101,13 @@ const ProductPage = () => {
           <div className="flex flex-col basis-2/5 gap-4">
             <h2 className="text-2xl overflow-ellipsis overflow-hidden whitespace-nowrap;">
               {product.name}
-              <h3 className="text-lg">Men's shoes</h3>
+              <div className="text-lg  flex">
+                {product.categories.map((category) => (
+                  <div className="pr-2 py-2 " key={category.id}>
+                    {category.name} -
+                  </div>
+                ))}
+              </div>
             </h2>
 
             {/*<div className="flex items-center gap-2">

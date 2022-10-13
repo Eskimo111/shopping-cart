@@ -3,7 +3,7 @@ import { Select } from "antd";
 import { BiChevronDown } from "react-icons/bi";
 import "./SortBy.less";
 import { useAppDispatch } from "../../../app/hooks";
-import { setSortBy, setSortDirection } from "../filterSlice";
+import { setPage, setSortBy, setSortDirection } from "../../../slices/filter";
 
 const { Option } = Select;
 
@@ -13,8 +13,10 @@ const SortBy = () => {
   const [sortField, setSortField] = useState("");
 
   useEffect(() => {
-    if (sortField !== "")
+    if (sortField !== "") {
+      dispatch(setPage(1));
       dispatch(setSortBy({ sortBy: sortField, sortDirection: direction }));
+    }
   }, [direction, sortField]);
 
   const handleChange = (value: string) => {

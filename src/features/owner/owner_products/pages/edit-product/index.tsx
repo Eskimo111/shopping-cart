@@ -9,7 +9,7 @@ import {
 import { RootState } from "../../../../../app/store";
 import BackButton from "../../../../../common/button/BackButton";
 import Message from "../../../../../common/message/Message";
-import { Product, updateProduct } from "../../../../shopping/productsSlice";
+import { Product, updateProduct } from "../../../../../slices/products";
 import EditVariant from "./components/EditVariant";
 
 const emptyProduct = {
@@ -26,6 +26,7 @@ const emptyProduct = {
     formatted: "",
   },
   variant_groups: [],
+  categories: [],
 };
 
 const OwnerProductPage = () => {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAppDispatch, useDelayUnmount } from "../../../app/hooks";
 import Message from "../../../common/message/Message";
-import { sendMagicEmail } from "../userSlice";
+import { sendMagicEmail } from "../../../slices/user";
 
 const logo = require("../../../asset/logo192.png");
 

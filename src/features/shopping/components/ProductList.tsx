@@ -4,10 +4,13 @@ import { RootState } from "../../../app/store";
 import ProductItem from "./ProductItem";
 import Pagination from "../../pagination/Pagination";
 import { useDispatch } from "react-redux";
-import { fetchProductByPage, fetchProductWithFilter } from "../productsSlice";
+import {
+  fetchProductByPage,
+  fetchProductWithFilter,
+} from "../../../slices/products";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import LoadingSpinner from "../../../common/loading-spinner/LoadingSpinner";
-import { setPage } from "../../filter-product/filterSlice";
+import { setPage } from "../../../slices/filter";
 import SortBy from "../../filter-product/components/SortBy";
 
 const ProductList = () => {
@@ -46,7 +49,9 @@ const ProductList = () => {
           <LoadingSpinner />
         </div>
       ) : (
-        productList.map((element) => <ProductItem data={element}></ProductItem>)
+        productList.map((element) => (
+          <ProductItem key={element.id} data={element}></ProductItem>
+        ))
       )}
       <Pagination pagination={pagination} onPageChange={handlePageChange} />
     </div>

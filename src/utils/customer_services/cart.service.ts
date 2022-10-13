@@ -13,13 +13,17 @@ const cartService = {
     const url = `/carts/${cart_id}`;
     return axiosClient.post(url, product);
   },
-  removeFromCart: (id: string, cart_id: string) => {
-    const url = `/carts/${cart_id}/items/${id}`;
+  removeFromCart: (prod_id: string, cart_id: string) => {
+    const url = `/carts/${cart_id}/items/${prod_id}`;
     return axiosClient.delete(url);
   },
   updateCart: (line_id: string, quantity: number, cart_id: string) => {
     const url = `/carts/${cart_id}/items/${line_id}`;
     return axiosClient.put(url, { quantity: quantity });
+  },
+  deleteCart: (cart_id: string) => {
+    const url = `/carts/${cart_id}`;
+    return axiosClient.delete(url);
   },
 };
 

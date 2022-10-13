@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../../app/hooks";
-import { fetchProductById, Product } from "../productsSlice";
+import { fetchProductById, Product } from "../../../slices/products";
 
 const ProductItem = (props: { data: Product }) => {
   const dispatch = useAppDispatch();

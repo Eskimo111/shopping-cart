@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { RootState } from "../../../app/store";
 import BackButton from "../../../common/button/BackButton";
-import { fetchProductById } from "../../shopping/productsSlice";
+import { fetchProductById } from "../../../slices/products";
 import OwnerProductItem from "./components/OwnerProductItem";
 
 const ManageProductPage = () => {

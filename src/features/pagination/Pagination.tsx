@@ -1,6 +1,6 @@
 import React from "react";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
-import { Pagination } from "./paginationSlice";
+import { Pagination } from "../../slices/pagination";
 
 const ProductPagination = (props: {
   pagination: Pagination;

@@ -5,7 +5,7 @@ import { useState } from "react";
 import categoryApi from "../../../utils/customer_services/category.service";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { RootState } from "../../../app/store";
-import { setCategory } from "../filterSlice";
+import { setCategory, setPage } from "../../../slices/filter";
 
 const fetchCategories = async () => {
   const response = await categoryApi.getCategories();
@@ -31,6 +31,7 @@ const CategoryFilter = () => {
   }, []);
   const onChange = (checkedValues: CheckboxValueType[]) => {
     console.log("checked = ", checkedValues);
+    dispatch(setPage(1));
     dispatch(setCategory(checkedValues));
   };
 

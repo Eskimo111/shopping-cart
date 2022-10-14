@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import userApi from "../utils/customer_services/user.service";
-import { RootState } from "../app/store";
+import { RootState } from "../store/store";
 import {
   auth,
   signInWithEmailAndPassword,

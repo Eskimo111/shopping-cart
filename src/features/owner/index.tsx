@@ -1,7 +1,7 @@
 import React from "react";
 import { GiRunningShoe } from "react-icons/gi";
 import { GrResources } from "react-icons/gr";
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const OwnerPage = () => {
   return (

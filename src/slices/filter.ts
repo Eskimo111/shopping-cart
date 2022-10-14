@@ -1,28 +1,21 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 export interface Filter {
-  query: string | undefined;
-  category_slug: string | string[] | undefined;
+  query?: string | null;
+  category_slug?: string | null;
   limit: number;
   page: number;
-  price:
-    | {
-        above: number;
-        below: number;
-      }
-    | undefined;
-  sortBy: string | undefined;
-  sortDirection: "asc" | "desc" | undefined;
+  price?: {
+    above: number;
+    below: number;
+  } | null;
+  sortBy?: string | null;
+  sortDirection?: "asc" | "desc" | null;
 }
 
-const initialState = {
-  query: undefined,
-  category_slug: undefined,
+const initialState: Filter = {
   limit: 6,
   page: 1,
-  price: undefined,
-  sortBy: undefined,
-  sortDirection: undefined,
 };
 
 export const filterSlice = createSlice({
@@ -34,9 +27,10 @@ export const filterSlice = createSlice({
     setQuery: (state, action) => {
       state.query = action.payload;
     },
-    setCategory: (state, action) => {
-      state.category_slug = action.payload;
-    },
+    setCategory: (state, { payload }) => ({
+      ...state,
+      category_slug: payload,
+    }),
     setPrice: (state, action) => {
       if (state.price) {
         state.price = action.payload;
@@ -48,12 +42,14 @@ export const filterSlice = createSlice({
       sortDirection:
         payload.sortDirection !== "" ? payload.sortDirection : undefined,
     }),
-    setSortDirection: (state, action) => {
-      state.sortDirection = action.payload;
-    },
-    setPage: (state, action) => {
-      state.page = action.payload;
-    },
+    setSortDirection: (state, { payload }) => ({
+      ...state,
+      sortDirection: payload,
+    }),
+    setPage: (state, { payload }) => ({
+      ...state,
+      page: payload,
+    }),
   },
   extraReducers: {},
 });

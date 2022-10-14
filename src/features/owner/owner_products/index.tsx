@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { RootState } from "../../../app/store";
-import BackButton from "../../../common/button/BackButton";
+import { RootState } from "../../../store/store";
+import BackButton from "../../../components/button/BackButton";
 import { fetchProductById } from "../../../slices/products";
 import OwnerProductItem from "./components/OwnerProductItem";
+import { useAppSelector } from "../../../hooks/use-app-selector";
+import { useAppDispatch } from "../../../hooks/use-app-dispatch";
 
 const ManageProductPage = () => {
   const productList = useAppSelector((state: RootState) => state.products);

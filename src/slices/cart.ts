@@ -6,7 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import cartService from "../utils/customer_services/cart.service";
 
-import { getCookie, setCookie } from "../app/cookie";
+import { getCookie, setCookie } from "../store/cookie";
 import { Product } from "./products";
 
 export interface CartItemType extends Product {

@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { useParams } from "react-router-dom";
-import {
-  useAppDispatch,
-  useAppSelector,
-  useDelayUnmount,
-} from "../../../../../app/hooks";
-import { RootState } from "../../../../../app/store";
-import BackButton from "../../../../../common/button/BackButton";
-import Message from "../../../../../common/message/Message";
+
+import { RootState } from "../../../../../store/store";
+import BackButton from "../../../../../components/button/BackButton";
+import Message from "../../../../../components/message/Message";
 import { Product, updateProduct } from "../../../../../slices/products";
 import EditVariant from "./components/EditVariant";
+import { useDelayUnmount } from "../../../../../hooks/use-delay-unmount";
+import { useAppSelector } from "../../../../../hooks/use-app-selector";
+import { useAppDispatch } from "../../../../../hooks/use-app-dispatch";
 
 const emptyProduct = {
   id: "",

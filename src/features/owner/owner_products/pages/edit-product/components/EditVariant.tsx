@@ -1,7 +1,7 @@
 import React from "react";
 import { Product } from "../../../../../../slices/products";
 import "tw-elements";
-import TagInput from "../../../../../../common/tag_input/TagInput";
+import TagInput from "../../../../../../components/tag_input/TagInput";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 
 const EditVariant = (props: { onHide: Function; product: Product }) => {

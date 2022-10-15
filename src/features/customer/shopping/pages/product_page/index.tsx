@@ -1,14 +1,12 @@
-import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import productApi from "../../../../../utils/customer_services/product.service";
 import LoadingSpinner from "../../../../../components/loading-spinner/LoadingSpinner";
-import Message from "../../../../../components/message/Message";
 import { addToCartAsync } from "../../../../../slices/cart";
 import ProductNotFound from "./ProductNotFound";
 import { Product } from "../../../../../slices/products";
-import { useDelayUnmount } from "../../../../../hooks/use-delay-unmount";
 import { useAppDispatch } from "../../../../../hooks/use-app-dispatch";
+import useMessage from "../../../../../hooks/use-message";
 
 const emptyProduct: Product = {
   id: "",
@@ -46,14 +44,11 @@ const fetchProductById = async (productId: string) => {
 };
 
 const ProductPage = () => {
+  const messenger = useMessage();
   const { productId } = useParams();
   const [product, setProduct] = useState(emptyProduct);
   const [loading, setLoading] = useState(true);
   const [sizeSelected, setSizeSelected] = useState(0);
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("");
-  const [messageShow, setMessageShow] = useState(false);
-  const shouldRenderMessage = useDelayUnmount(messageShow, 500);
   const [quantity, setQuantity] = useState(1);
 
   const dispatch = useAppDispatch();
@@ -68,26 +63,13 @@ const ProductPage = () => {
 
   if (!product) return <ProductNotFound />;
 
-  const showMessage = (message: string, type: string) => {
-    setMessage(message);
-    setMessageType(type);
-    setMessageShow(true);
-    setTimeout(() => setMessageShow(false), 2000);
-  };
-
   return (
     <>
       {loading ? (
         <LoadingSpinner />
       ) : (
         <div className="flex flex-col md:flex-row p-8 font-inter gap-12 justify-between">
-          {shouldRenderMessage && (
-            <Message
-              showing={messageShow}
-              type={messageType}
-              message={message}
-            />
-          )}
+          {messenger.node}
           <div className="basis-2/4">
             <img
               className="w-full h-3/4 object-cover"
@@ -151,13 +133,13 @@ const ProductPage = () => {
                   )
                     .unwrap()
                     .then(() => {
-                      showMessage(
+                      messenger.showMessage(
                         `Add ${quantity} ${product.name} to cart successfully!`,
                         "success"
                       );
                     })
                     .catch(() => {
-                      showMessage("Error. Can't add product to cart", "fail");
+                      messenger.showMessage(`Error. Try again!`, "failed");
                     })
                 }
               >

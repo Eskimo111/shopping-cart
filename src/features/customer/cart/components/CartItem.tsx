@@ -1,10 +1,8 @@
 import { Skeleton, Space } from "antd";
-import { produceWithPatches } from "immer";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import Message from "../../../../components/message/Message";
 import { useAppDispatch } from "../../../../hooks/use-app-dispatch";
 import { useDelayUnmount } from "../../../../hooks/use-delay-unmount";
+import useMessage from "../../../../hooks/use-message";
 import {
   CartItemType,
   removeFromCartAsync,
@@ -18,19 +16,9 @@ const formatPrice = (price: number) => {
 const CartItem = (props: { data: CartItemType }) => {
   const product = props.data;
   const [quantity, setQuantity] = useState(product.quantity);
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("");
-  const [messageShow, setMessageShow] = useState(false);
-  const shouldRenderMessage = useDelayUnmount(messageShow, 1000);
+  const message = useMessage();
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-
-  const showMessage = (message: string, type: string) => {
-    setMessage(message);
-    setMessageType(type);
-    setMessageShow(true);
-    setTimeout(() => setMessageShow(false), 2000);
-  };
 
   const handleChangeQuantity = (event: React.SyntheticEvent) => {
     let target = event.target as HTMLInputElement;
@@ -41,18 +29,30 @@ const CartItem = (props: { data: CartItemType }) => {
     event.preventDefault();
     return false;
   };
-
+  const handleRemoveItem = () => {
+    setLoading(true);
+    dispatch(removeFromCartAsync(product.id))
+      .unwrap()
+      .then(() => {
+        setLoading(false);
+        message.showMessage("Item(s) removed.", "failed");
+      })
+      .catch(() => {
+        setLoading(false);
+        message.showMessage("Error. Try again.", "failed");
+      });
+  };
   const dispatchQuantity = (quantity: number) => {
     setLoading(true);
     dispatch(updateCartAsync({ line_id: product.id, quantity: quantity }))
       .unwrap()
       .then(() => {
         setLoading(false);
-        showMessage("Update quantity succesfully!", "success");
+        message.showMessage("Update quantity succesfully!", "success");
       })
       .catch(() => {
         setLoading(false);
-        showMessage("Update quantity unsuccesfully!", "failed");
+        message.showMessage("Error.Try again!", "failed");
       });
   };
   return (
@@ -68,13 +68,7 @@ const CartItem = (props: { data: CartItemType }) => {
         </Space>
       ) : (
         <div className="card-item font-inter justify-between border-b pb-12">
-          {shouldRenderMessage && (
-            <Message
-              showing={messageShow}
-              type={messageType}
-              message={message}
-            />
-          )}
+          {message.node}
           <div className="h-full flex flex-col items-center md:flex-row md:max-w-xl gap-4">
             <div className="w-20 h-20 md:w-32 md:h-32">
               <img
@@ -133,22 +127,7 @@ const CartItem = (props: { data: CartItemType }) => {
           </div>
           <div className="flex w-3/4 md:w-auto md:h-full md:flex-col justify-between items-end pt-4">
             <span>{formatPrice(product.line_total.raw)}</span>
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                setLoading(true);
-                dispatch(removeFromCartAsync(product.id))
-                  .unwrap()
-                  .then(() => {
-                    setLoading(false);
-                    showMessage("Item(s) removed.", "failed");
-                  })
-                  .catch(() => {
-                    setLoading(false);
-                    showMessage("Error. Try again.", "failed");
-                  });
-              }}
-            >
+            <div className="cursor-pointer" onClick={handleRemoveItem}>
               <svg
                 aria-hidden="true"
                 focusable="false"

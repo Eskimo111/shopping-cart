@@ -17,6 +17,6 @@ export function getCookie(name: string) {
   }
   return null;
 }
-function eraseCookie(name: string) {
+export function eraseCookie(name: string) {
   document.cookie = name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 }

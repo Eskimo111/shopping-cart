@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import "./App.css";
 import { getCookie } from "./store/cookie";
 import { createCartAsync, loadCartAsync } from "./slices/cart";
 import { useAppDispatch } from "./hooks/use-app-dispatch";

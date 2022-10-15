@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios from "axios";
 import queryString from "query-string";
 
 const headers: Readonly<Record<string, string | boolean>> = {

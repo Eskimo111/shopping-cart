@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import "antd/dist/antd.css";
 import "./index.css";
 import NavBar from "./components/navbar/NavBar";
+import { isHideHeader } from "./routers/layout-config";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -14,7 +15,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <Provider store={store}>
     <HashRouter>
-      <NavBar />
+      {isHideHeader(window.location.pathname) && <NavBar />}
       <App />
     </HashRouter>
   </Provider>

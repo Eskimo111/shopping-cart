@@ -51,6 +51,7 @@ export const sendMagicEmail = createAsyncThunk(
 export const login = createAsyncThunk(
   "user/login",
   async (arg: { email: string; password: string }) => {
+    console.log("login");
     const { email, password } = arg;
     const response = await signInWithEmailAndPassword(auth, email, password);
     console.log(response);
@@ -61,6 +62,7 @@ export const login = createAsyncThunk(
 export const signup = createAsyncThunk(
   "user/signup",
   async (arg: { email: string; password: string }) => {
+    console.log("signup");
     const { email, password } = arg;
     const response = await createUserWithEmailAndPassword(
       auth,
@@ -77,15 +79,39 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     // login
-    builder.addCase(login.pending, (state) => ({
+    builder.addCase(login.pending, (state, { payload }) => ({
       ...state,
+
       loginLoading: true,
     }));
-    builder.addCase(login.fulfilled, (state, payload) => ({
+    builder.addCase(login.fulfilled, (state, { payload }) => ({
       ...state,
+      token: (payload as any).accessToken,
+      user: {
+        ...state.user,
+        email: (payload as any).email,
+      },
       loginLoading: false,
     }));
     builder.addCase(login.rejected, (state) => ({
+      ...state,
+      loginLoading: false,
+    }));
+    builder.addCase(signup.pending, (state, { payload }) => ({
+      ...state,
+
+      loginLoading: true,
+    }));
+    builder.addCase(signup.fulfilled, (state, { payload }) => ({
+      ...state,
+      token: (payload as any).accessToken,
+      user: {
+        ...state.user,
+        email: (payload as any).email,
+      },
+      loginLoading: false,
+    }));
+    builder.addCase(signup.rejected, (state) => ({
       ...state,
       loginLoading: false,
     }));

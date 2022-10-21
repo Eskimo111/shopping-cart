@@ -1,13 +1,9 @@
 import { Skeleton, Space } from "antd";
 import React, { useState } from "react";
 import { useAppDispatch } from "../../../../hooks/use-app-dispatch";
-import { useDelayUnmount } from "../../../../hooks/use-delay-unmount";
 import useMessage from "../../../../hooks/use-message";
-import {
-  CartItemType,
-  removeFromCartAsync,
-  updateCartAsync,
-} from "../../../../slices/cart";
+import { CartItemType } from "../../../../models/cart";
+import { removeFromCartAsync, updateCartAsync } from "../../../../slices/cart";
 
 const formatPrice = (price: number) => {
   return price.toLocaleString("vi", { style: "currency", currency: "VND" });

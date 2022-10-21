@@ -4,7 +4,6 @@ import "tw-elements";
 const img1 = require("../../asset/banner/banner-1.jpg");
 const img2 = require("../../asset/banner/banner-2.jpg");
 const img3 = require("../../asset/banner/banner-3.jpg");
-console.log(img1);
 
 const Banner = () => {
   return (

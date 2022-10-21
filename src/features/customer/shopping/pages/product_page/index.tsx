@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import productApi from "../../../../../utils/customer_services/product.service";
 import LoadingSpinner from "../../../../../components/loading-spinner/LoadingSpinner";
 import { addToCartAsync } from "../../../../../slices/cart";
 import ProductNotFound from "./ProductNotFound";
-import { Product } from "../../../../../slices/products";
 import { useAppDispatch } from "../../../../../hooks/use-app-dispatch";
 import useMessage from "../../../../../hooks/use-message";
+import { Product } from "../../../../../models/product";
+import { fetchProductById } from "../../../../../slices/products";
 
 const emptyProduct: Product = {
   id: "",
@@ -36,17 +36,10 @@ const emptyProduct: Product = {
   categories: [],
 };
 
-const fetchProductById = async (productId: string) => {
-  const response = await productApi.getById(productId);
-  //console.log(response);
-  //console.log(response.data);
-  return response;
-};
-
 const ProductPage = () => {
   const messenger = useMessage();
   const { productId } = useParams();
-  const [product, setProduct] = useState(emptyProduct);
+  const [product, setProduct] = useState<Product>(emptyProduct);
   const [loading, setLoading] = useState(true);
   const [sizeSelected, setSizeSelected] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -55,19 +48,21 @@ const ProductPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchProductById(productId!).then((result) => {
-      setProduct(result as any);
-      setLoading(false);
-    });
+    fetchProductById(productId!)
+      .then((result) => {
+        setProduct(result);
+        setLoading(false);
+      })
+      .catch((reject) => {
+        setLoading(false);
+      });
   }, []);
-
-  if (!product) return <ProductNotFound />;
 
   return (
     <>
       {loading ? (
         <LoadingSpinner />
-      ) : (
+      ) : product !== emptyProduct ? (
         <div className="flex flex-col md:flex-row p-8 font-inter gap-12 justify-between">
           {messenger.node}
           <div className="basis-2/4">
@@ -81,7 +76,7 @@ const ProductPage = () => {
             <h2 className="text-2xl overflow-ellipsis overflow-hidden whitespace-nowrap;">
               {product.name}
               <div className="text-lg  flex">
-                {product.categories.map((category) => (
+                {product.categories?.map((category) => (
                   <div className="pr-2 py-2 " key={category.id}>
                     {category.name} -
                   </div>
@@ -103,8 +98,8 @@ const ProductPage = () => {
               <p className="text-lg">Select Size</p>
               <div className="flex flex-wrap gap-2">
                 {/* Size selection */}
-                {product.variant_groups[0] &&
-                  product.variant_groups[0].options.map((size, index) => (
+                {product.variant_groups![0] &&
+                  product.variant_groups![0].options.map((size, index) => (
                     <div
                       key={index}
                       onClick={() => setSizeSelected(index)}
@@ -126,9 +121,9 @@ const ProductPage = () => {
                     addToCartAsync({
                       id: product.id,
                       quantity: quantity,
-                      variant_id: product.variant_groups[0].id,
+                      variant_id: product.variant_groups![0].id,
                       option_id:
-                        product.variant_groups[0].options[sizeSelected].id,
+                        product.variant_groups![0].options[sizeSelected].id,
                     })
                   )
                     .unwrap()
@@ -170,6 +165,8 @@ const ProductPage = () => {
             <div>{product.description}</div>
           </div>
         </div>
+      ) : (
+        <ProductNotFound />
       )}
     </>
   );

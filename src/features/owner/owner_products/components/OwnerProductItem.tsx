@@ -1,10 +1,7 @@
-import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../../../hooks/use-app-dispatch";
-import { fetchProductById, Product } from "../../../../slices/products";
+import { Product } from "../../../../models/product";
 
 const OwnerProductItem = (props: { data: Product }) => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const product = props.data;
 
@@ -14,7 +11,6 @@ const OwnerProductItem = (props: { data: Product }) => {
     <tr
       className="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
       onClick={() => {
-        dispatch(fetchProductById(product.id));
         navigate(`${product.id}`);
       }}
     >
@@ -34,7 +30,7 @@ const OwnerProductItem = (props: { data: Product }) => {
           </span>
         ) : (
           <span className="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs">
-            Pending
+            Inactive
           </span>
         )}
       </td>

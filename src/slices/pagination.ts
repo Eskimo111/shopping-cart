@@ -1,15 +1,5 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import productApi from "../utils/customer_services/product.service";
-import ownerProductApi from "../utils/owner_services/productApi";
-import { RootState } from "../store/store";
-
-export interface Pagination {
-  total: number;
-  count: number;
-  per_page: number;
-  current_page: number;
-  total_pages: number;
-}
+import { createSlice } from "@reduxjs/toolkit";
+import { Pagination } from "../models/pagination";
 
 const initialState: Pagination = {
   total: 0,

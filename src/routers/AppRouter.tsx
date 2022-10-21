@@ -1,12 +1,15 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import ConstructPage from "../components/construct/Construct";
-import LoginPage from "../features/auth/loginpage/LoginPage";
+import LoginPage from "../features/auth/pages/LoginPage";
+import SignUpPage from "../features/auth/pages/SignUpPage";
 import CartPage from "../features/customer/cart";
 import ShoppingPage from "../features/customer/shopping";
 import ProductPage from "../features/customer/shopping/pages/product_page";
 import SearchPage from "../features/customer/shopping/pages/search_page";
 import OwnerPage from "../features/owner";
+import ManageProductPage from "../features/owner/owner_products";
+import OwnerProductPage from "../features/owner/owner_products/pages/edit-product";
 
 const AppRouter = () => {
   return (
@@ -20,12 +23,14 @@ const AppRouter = () => {
       </Route>
       <Route path="/search" element={<SearchPage />}></Route>
       <Route path="/login" element={<LoginPage />}></Route>
+      <Route path="/signup" element={<SignUpPage />}></Route>
+
       <Route path="/user/:token" element={<LoginPage />}></Route>
       <Route path="/owner">
         <Route index element={<OwnerPage />}></Route>
         <Route path="products">
-          <Route index element={<ConstructPage />}></Route>
-          <Route path=":productId" element={<ConstructPage />}></Route>
+          <Route index element={<ManageProductPage />}></Route>
+          <Route path=":productId" element={<OwnerProductPage />}></Route>
         </Route>
         <Route path="*" element={<ConstructPage />}></Route>
       </Route>

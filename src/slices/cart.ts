@@ -7,35 +7,7 @@ import {
 import cartService from "../utils/customer_services/cart.service";
 
 import { getCookie, setCookie } from "../store/cookie";
-import { Product } from "./products";
-
-export interface CartItemType extends Product {
-  id: string;
-  product_id: string;
-  name: string;
-  quantity: number;
-  price: {
-    raw: number;
-    formatted: string;
-  };
-  line_total: { raw: number; formatted: string };
-  selected_options: [{ group_name: string; option_name: string }];
-}
-
-export interface Cart {
-  id: string;
-  line_items: CartItemType[];
-  total_items: number;
-  total_unique_items: number;
-  subtotal: {
-    raw: number;
-    formatted: string;
-  };
-  currency: {
-    code: string;
-    symbol: string;
-  };
-}
+import { Cart, CartItemType } from "../models/cart";
 
 const initialState: Cart = {
   id: "",
@@ -145,7 +117,7 @@ export const cartSlice = createSlice({
     addToCart: (state, { payload }): Cart => ({
       ...state,
       line_items: state.line_items.map((product) =>
-        product.id === payload.id
+        product.line_id === payload.id
           ? {
               ...product,
               quantity: product.quantity + payload.quantity,

@@ -10,21 +10,21 @@ import { useAppSelector } from "../../../../hooks/use-app-selector";
 import { useAppDispatch } from "../../../../hooks/use-app-dispatch";
 
 const ProductList = () => {
+  const dispatch = useAppDispatch();
   const pagination = useAppSelector((state: RootState) => state.pagination);
   const filter = useAppSelector((state: RootState) => state.filter);
-  const dispatch = useAppDispatch();
   const productList = useAppSelector((state: RootState) => state.products);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    console.log(filter);
-    dispatch(fetchProductWithFilter(filter))
+    dispatch(fetchProductWithFilter())
       .unwrap()
       .then(() => {
         setLoading(false);
       });
   }, [filter]);
+
   const handlePageChange = (newPage: number) => {
     dispatch(setPage(newPage));
   };

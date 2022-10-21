@@ -1,8 +1,8 @@
 import React from "react";
-import { Product } from "../../../../../../slices/products";
 import "tw-elements";
 import TagInput from "../../../../../../components/tag_input/TagInput";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
+import { Product } from "../../../../../../models/product";
 
 const EditVariant = (props: { onHide: Function; product: Product }) => {
   const product = props.product;
@@ -48,7 +48,7 @@ const EditVariant = (props: { onHide: Function; product: Product }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {product.variant_groups.map((group) => (
+                  {product.variant_groups!.map((group) => (
                     <tr className="justify-between text-sm bg-white w-full ">
                       <td className="p-2">
                         <input

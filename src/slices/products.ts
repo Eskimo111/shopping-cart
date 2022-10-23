@@ -35,6 +35,7 @@ export const fetchProductWithFilter = createAsyncThunk(
     const filter = (getState() as RootState).filter;
     const response = (await productApi.getWithFilter(filter)) as any;
     dispatch(setPagination(response.meta.pagination));
+    if (!response.data) return [];
     return response.data as Product[];
   }
 );
@@ -115,10 +116,9 @@ export const productsSlice = createSlice({
     builder
       .addCase(fetchAllProduct.fulfilled, (state, { payload }) => payload)
       .addCase(fetchProductByPage.fulfilled, (state, { payload }) => payload)
-      .addCase(
-        fetchProductWithFilter.fulfilled,
-        (state, { payload }) => payload
-      )
+      .addCase(fetchProductWithFilter.fulfilled, (state, { payload }) => {
+        return payload;
+      })
       .addCase(
         ownerFetchProductWithFilter.fulfilled,
         (state, { payload }) => payload

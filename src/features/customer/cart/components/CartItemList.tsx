@@ -7,10 +7,11 @@ import { useAppDispatch } from "../../../../hooks/use-app-dispatch";
 import { useAppSelector } from "../../../../hooks/use-app-selector";
 
 const CartItemList = () => {
+  const dispatch = useAppDispatch();
   const { id, line_items: lineItems } = useAppSelector(
     (state: RootState) => state.cart
   );
-  const dispatch = useAppDispatch();
+
   return (
     <div className="basis-full md:basis-2/3 pt-8">
       <div className="flex justify-between">

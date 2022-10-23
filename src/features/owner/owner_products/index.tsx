@@ -11,10 +11,10 @@ import ProductPagination from "../../customer/pagination/Pagination";
 
 const ManageProductPage = () => {
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState<boolean>(true);
   const productList = useAppSelector((state: RootState) => state.products);
   const filter = useAppSelector((state: RootState) => state.filter);
   const pagination = useAppSelector((state: RootState) => state.pagination);
+  const [loading, setLoading] = useState<boolean>(true);
 
   // reset filter when first render component
   useEffect(() => {

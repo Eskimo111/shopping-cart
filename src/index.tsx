@@ -15,7 +15,6 @@ const root = ReactDOM.createRoot(
 root.render(
   <Provider store={store}>
     <HashRouter>
-      {isHideHeader(window.location.pathname) && <NavBar />}
       <App />
     </HashRouter>
   </Provider>

@@ -8,43 +8,14 @@ import useMessage from "../../../../../hooks/use-message";
 import { Product } from "../../../../../models/product";
 import { fetchProductById } from "../../../../../slices/products";
 
-const emptyProduct: Product = {
-  id: "",
-  name: "",
-  image: {
-    id: "",
-    url: "",
-  },
-  description: "",
-  active: false,
-  price: {
-    raw: 0,
-    formatted: "",
-  },
-  variant_groups: [
-    {
-      id: "",
-      name: "",
-      options: [
-        {
-          id: "",
-          name: "",
-        },
-      ],
-    },
-  ],
-  categories: [],
-};
-
 const ProductPage = () => {
-  const messenger = useMessage();
   const { productId } = useParams();
-  const [product, setProduct] = useState<Product>(emptyProduct);
+  const messenger = useMessage();
+  const dispatch = useAppDispatch();
+  const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [sizeSelected, setSizeSelected] = useState(0);
   const [quantity, setQuantity] = useState(1);
-
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -62,7 +33,7 @@ const ProductPage = () => {
     <>
       {loading ? (
         <LoadingSpinner />
-      ) : product !== emptyProduct ? (
+      ) : product ? (
         <div className="flex flex-col md:flex-row p-8 font-inter gap-12 justify-between">
           {messenger.node}
           <div className="basis-2/4">
@@ -77,16 +48,14 @@ const ProductPage = () => {
               {product.name}
               <div className="text-lg  flex">
                 {product.categories?.map((category) => (
-                  <div className="pr-2 py-2 " key={category.id}>
-                    {category.name} -
-                  </div>
+                  <div
+                    className="category-item pr-2 py-2 "
+                    key={category.id}
+                  ></div>
                 ))}
               </div>
             </h2>
 
-            {/*<div className="flex items-center gap-2">
-          <span className="badge">Stock ready</span>
-  </div>*/}
             {/* Price */}
             <div>
               <span className="text-lg">
@@ -94,10 +63,10 @@ const ProductPage = () => {
                 <span className="text-sm">₫</span>
               </span>
             </div>
+            {/* Size selection */}
             <div className="my-3">
               <p className="text-lg">Select Size</p>
               <div className="flex flex-wrap gap-2">
-                {/* Size selection */}
                 {product.variant_groups![0] &&
                   product.variant_groups![0].options.map((size, index) => (
                     <div

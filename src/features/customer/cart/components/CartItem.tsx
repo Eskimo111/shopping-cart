@@ -5,16 +5,20 @@ import useMessage from "../../../../hooks/use-message";
 import { CartItemType } from "../../../../models/cart";
 import { removeFromCartAsync, updateCartAsync } from "../../../../slices/cart";
 
+type CartItemProps = {
+  data: CartItemType;
+};
+
 const formatPrice = (price: number) => {
   return price.toLocaleString("vi", { style: "currency", currency: "VND" });
 };
 
-const CartItem = (props: { data: CartItemType }) => {
+const CartItem = (props: CartItemProps) => {
   const product = props.data;
-  const [quantity, setQuantity] = useState(product.quantity);
   const message = useMessage();
-  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
+  const [quantity, setQuantity] = useState(product.quantity);
+  const [loading, setLoading] = useState(false);
 
   const handleChangeQuantity = (event: React.SyntheticEvent) => {
     let target = event.target as HTMLInputElement;
@@ -23,7 +27,6 @@ const CartItem = (props: { data: CartItemType }) => {
   const handleSubmitQuantity = (event: React.SyntheticEvent) => {
     dispatchQuantity(quantity);
     event.preventDefault();
-    return false;
   };
   const handleRemoveItem = () => {
     setLoading(true);
@@ -39,6 +42,7 @@ const CartItem = (props: { data: CartItemType }) => {
       });
   };
   const dispatchQuantity = (quantity: number) => {
+    setQuantity(quantity);
     setLoading(true);
     dispatch(updateCartAsync({ line_id: product.id, quantity: quantity }))
       .unwrap()
@@ -91,10 +95,9 @@ const CartItem = (props: { data: CartItemType }) => {
                       onClick={() => {
                         if (quantity > 1) {
                           dispatchQuantity(quantity - 1);
-                          setQuantity(quantity - 1);
                         }
                       }}
-                      className=" text-black w-6  rounded-l"
+                      className=" text-black w-6 rounded-l"
                     >
                       -
                     </button>
@@ -110,7 +113,6 @@ const CartItem = (props: { data: CartItemType }) => {
                       type="button"
                       onClick={() => {
                         dispatchQuantity(quantity + 1);
-                        setQuantity(quantity + 1);
                       }}
                       className="  text-black w-6 rounded-r"
                     >

@@ -6,11 +6,16 @@ import AppRouter from "./routers/AppRouter";
 import useMessage from "./hooks/use-message";
 import { RootState } from "./store/store";
 import { useAppSelector } from "./hooks/use-app-selector";
+import { isHideHeader } from "./routers/layout-config";
+import NavBar from "./components/navbar/NavBar";
+import { useLocation } from "react-router-dom";
 
 function App() {
   const dispatch = useAppDispatch();
   const message = useMessage();
   const { token } = useAppSelector((state: RootState) => state.user);
+  const location = useLocation();
+
   useEffect(() => {
     window.scrollTo(0, 0);
     if (getCookie("cart_id")) {
@@ -23,10 +28,13 @@ function App() {
   //message.showMessage("Login success", "success");
   //}, [token]);
   return (
-    <div className="max-h-screen pt-12">
-      {message.node}
-      <AppRouter />
-    </div>
+    <>
+      {isHideHeader(location.pathname) || <NavBar />}
+      <div className="max-h-screen pt-12">
+        {message.node}
+        <AppRouter />
+      </div>
+    </>
   );
 }
 

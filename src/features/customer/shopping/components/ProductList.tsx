@@ -28,7 +28,6 @@ const ProductList = () => {
   const handlePageChange = (newPage: number) => {
     dispatch(setPage(newPage));
   };
-
   return (
     <div className="basis-3/4 mx-auto px-12 flex flex-wrap items-center py-8">
       <div className="w-full flex justify-between">
@@ -39,10 +38,14 @@ const ProductList = () => {
         <div className="relative h-72 w-full">
           <LoadingSpinner />
         </div>
-      ) : (
+      ) : productList.length !== 0 ? (
         productList.map((element) => (
           <ProductItem key={element.id} data={element}></ProductItem>
         ))
+      ) : (
+        <p className="w-full text-center text-xl py-4">
+          There are no matching products!
+        </p>
       )}
       <Pagination pagination={pagination} onPageChange={handlePageChange} />
     </div>

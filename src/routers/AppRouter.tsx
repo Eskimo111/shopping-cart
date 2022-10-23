@@ -1,6 +1,7 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import ConstructPage from "../components/construct/Construct";
+import NavBar from "../components/navbar/NavBar";
 import LoginPage from "../features/auth/pages/LoginPage";
 import SignUpPage from "../features/auth/pages/SignUpPage";
 import CartPage from "../features/customer/cart";

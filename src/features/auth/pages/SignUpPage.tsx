@@ -1,28 +1,66 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../hooks/use-app-dispatch";
 import useMessage from "../../../hooks/use-message";
 import { login } from "../../../slices/user";
+import "./SignUp.less";
 
 const logo = require("../../../asset/logo192.png");
 
 const SignUpPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmpw, setConfirmpw] = useState<string>("");
+
+  const [touched, setTouched] = useState({
+    name: false,
+    email: false,
+    password: false,
+    comfirmpw: false,
+  });
+
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmpw: "",
+  });
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const message = useMessage();
 
+  const validateEmail = (email: string) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
   const handleInputChange = (event: React.SyntheticEvent) => {
     const target = event.target as HTMLInputElement;
     switch (target.name) {
+      case "name":
+        setName(target.value);
+        break;
       case "email":
         setEmail(target.value);
         break;
       case "password":
         setPassword(target.value);
         break;
+      case "comfirmpw":
+        setConfirmpw(target.value);
+        break;
     }
+  };
+
+  const handleBlur = (event: React.SyntheticEvent) => {
+    setErrors(validate(name, email, password, confirmpw));
+    const target = event.target as HTMLInputElement;
+    setTouched({ ...touched, [target.name]: true });
   };
 
   const handleSubmit = (event: React.SyntheticEvent) => {
@@ -30,21 +68,46 @@ const SignUpPage = () => {
       .unwrap()
       .then(() => {
         navigate("/");
-        message.showMessage(`Login success`, "success");
+        message.showMessage(
+          `Sign up successfully. You can log in now.`,
+          "success"
+        );
       })
       .catch(() => {
-        message.showMessage(
-          "Error. Can't send email, please try again",
-          "failed"
-        );
+        message.showMessage("Error, please try again", "failed");
       });
     setEmail("");
     setPassword("");
+    setName("");
+    setConfirmpw("");
     event.preventDefault();
   };
+  const validate = (
+    name: string,
+    email: string,
+    password: string,
+    confirmpw: string
+  ) => {
+    let errors = {
+      name: "",
+      email: "",
+      password: "",
+      confirmpw: "",
+    };
 
+    if (touched.name && name.length < 3)
+      errors.name = "Name's length should be greater than 3 characters.";
+    if (touched.email && !validateEmail(email))
+      errors.email = "Please enter correct email format";
+    if (touched.password && password.length < 3)
+      errors.password =
+        "Password's length should be greater than 3 characters.";
+    if (touched.password && touched.comfirmpw && password !== confirmpw)
+      errors.confirmpw = "Passwords don't match";
+    return errors;
+  };
   return (
-    <div className="m-auto flex justify-center flex-wrap w-5/6 md:w-1/2 lg:w-1/3 mt-20 p-8 gap-8">
+    <div className="m-auto flex justify-center flex-wrap w-5/6 md:w-1/2 lg:w-1/3 mt-0 p-8 gap-8">
       {message.node}
       <header className="flex flex-col justify-center items-center w-3/4 gap-4">
         <Link to="/">
@@ -62,44 +125,67 @@ const SignUpPage = () => {
         className="flex flex-col items-center gap-4 w-3/4"
         onSubmit={(e) => handleSubmit(e)}
       >
-        <input
-          className="p-2 pl-4 w-full border border-gray-300 rounded-lg"
-          type="text"
-          placeholder="Full name"
-          name="name"
-          value={email}
-          onChange={(e) => handleInputChange(e)}
-          required
-        />
-        <input
-          className="p-2 pl-4 w-full border border-gray-300 rounded-lg"
-          type="text"
-          placeholder="Email address"
-          name="email"
-          value={email}
-          onChange={(e) => handleInputChange(e)}
-          required
-        />
-        <input
-          className="p-2 pl-4 w-full border border-gray-300 rounded-lg"
-          type="password"
-          placeholder="Password"
-          name="password"
-          value={password}
-          onChange={(e) => handleInputChange(e)}
-          required
-        />
-        <input
-          className="p-2 pl-4 w-full border border-gray-300 rounded-lg"
-          type="password"
-          placeholder="Confirm Password"
-          name="confirm-password"
-          value={password}
-          onChange={(e) => handleInputChange(e)}
-          required
-        />
-
-        <button className="btn-primary w-full py-2 font-semibold">
+        <div className="input__container">
+          <input
+            className="border border-gray-300 rounded-lg"
+            type="text"
+            placeholder="Full name"
+            name="name"
+            value={name}
+            onChange={(e) => handleInputChange(e)}
+            onBlur={(e) => handleBlur(e)}
+            required
+          />
+          <p>{errors.name}</p>
+        </div>
+        <div className="input__container">
+          <input
+            className="border border-gray-300 rounded-lg"
+            type="text"
+            placeholder="Email address"
+            name="email"
+            value={email}
+            onChange={(e) => handleInputChange(e)}
+            onBlur={(e) => handleBlur(e)}
+            required
+          />
+          <p>{errors.email}</p>
+        </div>
+        <div className="input__container">
+          <input
+            className="border border-gray-300 rounded-lg"
+            type="password"
+            placeholder="Password"
+            name="password"
+            value={password}
+            onChange={(e) => handleInputChange(e)}
+            onBlur={(e) => handleBlur(e)}
+            required
+          />
+          <p>{errors.password}</p>
+        </div>
+        <div className="input__container">
+          <input
+            className="border border-gray-300 rounded-lg"
+            type="password"
+            placeholder="Confirm Password"
+            name="comfirmpw"
+            value={confirmpw}
+            onChange={(e) => handleInputChange(e)}
+            onBlur={(e) => handleBlur(e)}
+            required
+          />
+          <p>{errors.confirmpw}</p>
+        </div>
+        <button
+          className="btn-primary w-full py-2 font-semibold"
+          disabled={Boolean(
+            errors.name.length ||
+              errors.email.length ||
+              errors.password.length ||
+              errors.confirmpw.length
+          )}
+        >
           SIGN UP
         </button>
       </form>

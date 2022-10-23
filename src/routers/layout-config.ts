@@ -12,11 +12,7 @@ const hideHeader = ["/login", "/signup"];
 }
 
 const isInRoute = (pathname: string, routes: string[]): boolean => {
-  console.log(pathname);
-  routes.forEach((route) => {
-    if (route === pathname) console.log("match!!");
-  });
-  return true;
+  return routes.filter((route) => route === pathname).length > 0;
 };
 export const isHideHeader = (pathName: string): boolean =>
   isInRoute(pathName, hideHeader);

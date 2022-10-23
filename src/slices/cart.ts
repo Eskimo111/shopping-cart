@@ -125,9 +125,7 @@ export const cartSlice = createSlice({
           : product
       ),
     }),
-    loadCart: (state, action): Cart => ({
-      ...action.payload,
-    }),
+    loadCart: (state, { payload }): Cart => payload,
   },
   extraReducers: (builder) => {
     builder

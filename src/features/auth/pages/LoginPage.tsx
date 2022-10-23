@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import BackButton from "../../../components/button/BackButton";
 import { useAppDispatch } from "../../../hooks/use-app-dispatch";
 import useMessage from "../../../hooks/use-message";
 import { login } from "../../../slices/user";
@@ -29,7 +30,7 @@ const LoginPage = () => {
     dispatch(login({ email: email, password: password }))
       .unwrap()
       .then(() => {
-        navigate("/");
+        setTimeout(() => navigate("/"), 1000);
         message.showMessage(`Login success`, "success");
       })
       .catch(() => {

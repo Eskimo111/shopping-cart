@@ -7,10 +7,7 @@ import ProductList from "./components/ProductList";
 
 const ShoppingPage = () => {
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    console.log("resetFilter");
-    dispatch(resetFilter());
-  }, []);
+  dispatch(resetFilter());
   return (
     <>
       <Banner />

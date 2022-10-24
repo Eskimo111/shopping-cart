@@ -9,19 +9,18 @@ const initialState: Product[] = [];
 
 export const fetchAllProduct = createAsyncThunk(
   "products/getProduct",
-  async () => {
-    try {
-      const response = await productApi.getAll();
-      return response.data;
-    } catch (error) {
-      console.error();
-    }
+  async (): Promise<Product[]> => {
+    const response = await productApi.getAll();
+    return response.data as any as Product[];
   }
 );
 
 export const fetchProductByPage = createAsyncThunk(
   "products/getProductByPage",
-  async (input: { limit: number; page: number }, { dispatch }) => {
+  async (
+    input: { limit: number; page: number },
+    { dispatch }
+  ): Promise<Product[]> => {
     const response = (await productApi.getByPage(input)) as any;
     //console.log(response.meta.pagination);
     dispatch(setPagination(response.meta.pagination));
@@ -31,7 +30,7 @@ export const fetchProductByPage = createAsyncThunk(
 
 export const fetchProductWithFilter = createAsyncThunk(
   "products/getProductWithFilter",
-  async (no_arg, { dispatch, getState }) => {
+  async (no_arg, { dispatch, getState }): Promise<Product[]> => {
     const filter = (getState() as RootState).filter;
     const response = (await productApi.getWithFilter(filter)) as any;
     dispatch(setPagination(response.meta.pagination));
@@ -39,21 +38,6 @@ export const fetchProductWithFilter = createAsyncThunk(
     return response.data as Product[];
   }
 );
-
-/*export const fetchProductSize = createAsyncThunk(
-  "products/getProductSize",
-  async (empty: string, { getState, dispatch }) => {
-    const productList = (getState() as RootState).products;
-    try {
-      productList.forEach((element) => {
-        //console.log(element.id);
-        dispatch(fetchProductById(element.id));
-      });
-    } catch (error) {
-      console.error();
-    }
-  }
-);*/
 
 export const fetchProductById = async (
   product_id: string
@@ -71,23 +55,17 @@ export const updateProduct = createAsyncThunk(
     price: number;
     active: boolean;
   }) => {
-    const productWithoutId: {
-      name: string;
-      description: string;
-      price: number;
-      active: boolean;
-    } = input;
-    const apiInput = {
-      product: productWithoutId,
-    };
-
-    try {
-      const response = await ownerProductApi.updateProduct(input.id, apiInput);
-      //console.log(response);
-      return response;
-    } catch (error) {
-      console.error();
-    }
+    const { name, description, price, active } = input;
+    const response = await ownerProductApi.updateProduct(input.id, {
+      product: {
+        name: name,
+        description: description,
+        price: price,
+        active: active,
+      },
+    });
+    //console.log(response);
+    return response;
   }
 );
 
@@ -116,9 +94,10 @@ export const productsSlice = createSlice({
     builder
       .addCase(fetchAllProduct.fulfilled, (state, { payload }) => payload)
       .addCase(fetchProductByPage.fulfilled, (state, { payload }) => payload)
-      .addCase(fetchProductWithFilter.fulfilled, (state, { payload }) => {
-        return payload;
-      })
+      .addCase(
+        fetchProductWithFilter.fulfilled,
+        (state, { payload }) => payload
+      )
       .addCase(
         ownerFetchProductWithFilter.fulfilled,
         (state, { payload }) => payload

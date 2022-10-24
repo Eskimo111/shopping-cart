@@ -7,14 +7,6 @@ import {
   createUserWithEmailAndPassword,
 } from "../firebase";
 
-export interface User {
-  id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  phone: string;
-}
-
 const getTokenDataFromLocalStorage = () => {
   const tokenData = localStorage.getItem("tokenData")
     ? JSON.parse(localStorage.getItem("tokenData")!)
@@ -34,19 +26,6 @@ const initialState = {
     phone: "",
   },
 };
-
-const BASE_URL = "http://localhost:3000/users/:token:";
-
-export const sendMagicEmail = createAsyncThunk(
-  "user/sendEmail",
-  async (email: string) => {
-    const response = await userApi.sendEmail({
-      email: email,
-      base_url: BASE_URL,
-    });
-    return response.data;
-  }
-);
 
 export const login = createAsyncThunk(
   "user/login",
@@ -81,7 +60,6 @@ export const userSlice = createSlice({
     // login
     builder.addCase(login.pending, (state, { payload }) => ({
       ...state,
-
       loginLoading: true,
     }));
     builder.addCase(login.fulfilled, (state, { payload }) => ({

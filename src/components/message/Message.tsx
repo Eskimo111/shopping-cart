@@ -2,7 +2,7 @@ import React from "react";
 
 const Message = (props: {
   message: string;
-  type: string;
+  type: "success" | "fail";
   showing: boolean;
 }) => {
   console.log("message rendered!!");

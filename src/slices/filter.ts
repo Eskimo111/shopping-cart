@@ -1,17 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-export interface Filter {
-  query?: string | null;
-  category_slug?: string | null;
-  limit: number;
-  page: number;
-  price?: {
-    above: number;
-    below: number;
-  } | null;
-  sortBy?: string | null;
-  sortDirection?: "asc" | "desc" | null;
-}
+import { Filter } from "../models/filter";
 
 const initialState: Filter = {
   limit: 6,
@@ -22,7 +10,7 @@ export const filterSlice = createSlice({
   name: "filter",
   initialState,
   reducers: {
-    resetFilter: (state) => ({ ...initialState }),
+    resetFilter: () => ({ ...initialState }),
 
     setQuery: (state, action) => {
       state.query = action.payload;
@@ -38,13 +26,9 @@ export const filterSlice = createSlice({
     },
     setSortBy: (state, { payload }) => ({
       ...state,
-      sortBy: payload.sortBy !== "" ? payload.sortBy : undefined,
+      sortBy: payload.sortBy !== "" ? payload.sortBy : null,
       sortDirection:
-        payload.sortDirection !== "" ? payload.sortDirection : undefined,
-    }),
-    setSortDirection: (state, { payload }) => ({
-      ...state,
-      sortDirection: payload,
+        payload.sortDirection !== "" ? payload.sortDirection : null,
     }),
     setPage: (state, { payload }) => ({
       ...state,
@@ -60,7 +44,6 @@ export const {
   setPrice,
   setQuery,
   setSortBy,
-  setSortDirection,
   setPage,
 } = filterSlice.actions;
 

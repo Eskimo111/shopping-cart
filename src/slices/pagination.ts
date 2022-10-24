@@ -13,18 +13,7 @@ export const paginationSlice = createSlice({
   name: "pagination",
   initialState,
   reducers: {
-    setPagination: (state, action) => {
-      const { total, count, per_page, current_page, total_pages } =
-        action.payload as Pagination;
-      return {
-        ...state,
-        total: total,
-        count: count,
-        per_page: per_page,
-        current_page: current_page,
-        total_pages: total_pages,
-      };
-    },
+    setPagination: (state, { payload }) => payload,
   },
 });
 

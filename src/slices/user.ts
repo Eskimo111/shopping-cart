@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
-import userApi from "../utils/customer_services/user.service";
 import {
   auth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "../firebase";
+import { child, get, getDatabase, ref, set } from "firebase/database";
+import { User } from "../models/user";
+import { RootState } from "../store/store";
+import { UserCredential } from "firebase/auth";
 
 const getTokenDataFromLocalStorage = () => {
   const tokenData = localStorage.getItem("tokenData")
@@ -17,14 +19,13 @@ const getTokenDataFromLocalStorage = () => {
 const initialState = {
   token: null, //getTokenDataFromLocalStorage,
   tokenExpiredTime: null,
-  loginLoading: false,
-  user: {
+  userLoading: false,
+  info: {
     id: "",
-    firstname: "",
-    lastname: "",
+    name: "",
     email: "",
-    phone: "",
-  },
+    cart_id: "",
+  } as User,
 };
 
 export const login = createAsyncThunk(
@@ -33,7 +34,6 @@ export const login = createAsyncThunk(
     console.log("login");
     const { email, password } = arg;
     const response = await signInWithEmailAndPassword(auth, email, password);
-    console.log(response);
     return response;
   }
 );
@@ -48,8 +48,45 @@ export const signup = createAsyncThunk(
       email,
       password
     );
-    console.log(response);
-    return response;
+
+    return JSON.parse(JSON.stringify(response.user));
+  }
+);
+
+export const setUserInfo = createAsyncThunk(
+  "user/setInfo",
+  async (name: string, { getState }) => {
+    const { id } = (getState() as RootState).user.info;
+    const cart_id = (getState() as RootState).cart.id;
+    console.log(id);
+    console.log(cart_id);
+    const database = getDatabase();
+    set(ref(database, "users/" + id), {
+      name: name,
+      cart_id: cart_id,
+    });
+    return { name: name, cart_id: cart_id };
+  }
+);
+
+export const getUserInfo = createAsyncThunk(
+  "user/getInfo",
+  async (no_arg, { getState }) => {
+    const { id } = (getState() as RootState).user.info;
+    console.log(id);
+    const dbRef = ref(getDatabase());
+    get(child(dbRef, `users/${id}`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          console.log(snapshot.val());
+          return snapshot.val();
+        } else {
+          console.log("No data available");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 );
 export const userSlice = createSlice({
@@ -60,38 +97,75 @@ export const userSlice = createSlice({
     // login
     builder.addCase(login.pending, (state, { payload }) => ({
       ...state,
-      loginLoading: true,
+      userLoading: true,
     }));
     builder.addCase(login.fulfilled, (state, { payload }) => ({
       ...state,
-      token: (payload as any).accessToken,
+      token: (payload as any).user.accessToken,
       user: {
-        ...state.user,
-        email: (payload as any).email,
+        ...state.info,
+        id: (payload as any).user.uid,
+        email: (payload as any).user.email,
       },
-      loginLoading: false,
+      userLoading: false,
     }));
     builder.addCase(login.rejected, (state) => ({
       ...state,
-      loginLoading: false,
+      userLoading: false,
     }));
+    //sign up
     builder.addCase(signup.pending, (state, { payload }) => ({
       ...state,
 
-      loginLoading: true,
+      userLoading: true,
     }));
-    builder.addCase(signup.fulfilled, (state, { payload }) => ({
-      ...state,
-      token: (payload as any).accessToken,
-      user: {
-        ...state.user,
-        email: (payload as any).email,
-      },
-      loginLoading: false,
-    }));
+    builder.addCase(signup.fulfilled, (state, { payload }) => {
+      return {
+        ...state,
+        token: (payload as any).accessToken,
+        info: {
+          ...state.info,
+          id: (payload as any).uid,
+          email: (payload as any).email,
+        },
+        userLoading: false,
+      };
+    });
     builder.addCase(signup.rejected, (state) => ({
       ...state,
-      loginLoading: false,
+      userLoading: false,
+    }));
+    //set info
+    builder.addCase(setUserInfo.pending, (state) => ({
+      ...state,
+      userLoading: true,
+    }));
+    builder.addCase(setUserInfo.fulfilled, (state, { payload }) => ({
+      ...state,
+      user: {
+        ...state.info,
+        name: payload.name,
+        cart_id: payload.cart_id,
+      },
+      userLoading: false,
+    }));
+    builder.addCase(setUserInfo.rejected, (state) => ({
+      ...state,
+      userLoading: false,
+    }));
+    //get info
+    builder.addCase(getUserInfo.pending, (state) => ({
+      ...state,
+      userLoading: true,
+    }));
+    builder.addCase(getUserInfo.fulfilled, (state, { payload }) => ({
+      ...state,
+
+      userLoading: false,
+    }));
+    builder.addCase(getUserInfo.rejected, (state) => ({
+      ...state,
+      userLoading: false,
     }));
   },
 });

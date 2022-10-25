@@ -12,7 +12,6 @@ const SearchPage = () => {
   let searchString = searchParams.get("search");
   if (!searchString) searchString = "";
   dispatch(resetFilter());
-  dispatch(setQuery(searchString));
   return (
     <div className="container mx-auto p-12 flex flex-wrap items-center font-inter">
       <h2 className="text-xl basis-full mb-8 text-center">

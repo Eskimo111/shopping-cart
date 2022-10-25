@@ -34,11 +34,11 @@ const CartItem = (props: CartItemProps) => {
       .unwrap()
       .then(() => {
         setLoading(false);
-        message.showMessage("Item(s) removed.", "failed");
+        message.showMessage("Item(s) removed.", "fail");
       })
       .catch(() => {
         setLoading(false);
-        message.showMessage("Error. Try again.", "failed");
+        message.showMessage("Error. Try again.", "fail");
       });
   };
   const dispatchQuantity = (quantity: number) => {
@@ -52,7 +52,7 @@ const CartItem = (props: CartItemProps) => {
       })
       .catch(() => {
         setLoading(false);
-        message.showMessage("Error.Try again!", "failed");
+        message.showMessage("Error.Try again!", "fail");
       });
   };
   return (

@@ -1,17 +1,30 @@
+import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
+import { BsThreeDots } from "react-icons/bs";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import { LoadingOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../../../hooks/use-app-dispatch";
 import useMessage from "../../../hooks/use-message";
-import { login } from "../../../slices/user";
+import { login, setUserInfo, signup } from "../../../slices/user";
 import "./SignUp.less";
 
 const logo = require("../../../asset/logo192.png");
 
+const antIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 14,
+    }}
+    spin
+  />
+);
+
 const SignUpPage = () => {
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmpw, setConfirmpw] = useState<string>("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmpw, setConfirmpw] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [touched, setTouched] = useState({
     name: false,
@@ -58,28 +71,31 @@ const SignUpPage = () => {
   };
 
   const handleBlur = (event: React.SyntheticEvent) => {
-    setErrors(validate(name, email, password, confirmpw));
     const target = event.target as HTMLInputElement;
     setTouched({ ...touched, [target.name]: true });
   };
 
+  useEffect(() => {
+    setErrors(validate(name, email, password, confirmpw));
+  }, [touched, name, email, password, confirmpw]);
+
   const handleSubmit = (event: React.SyntheticEvent) => {
-    dispatch(login({ email: email, password: password }))
+    setLoading(true);
+    dispatch(signup({ email: email, password: password }))
       .unwrap()
       .then(() => {
-        navigate("/");
         message.showMessage(
           `Sign up successfully. You can log in now.`,
           "success"
         );
+        setLoading(false);
+        //setTimeout(() => navigate("/"), 1000);
       })
       .catch(() => {
-        message.showMessage("Error, please try again", "failed");
-      });
-    setEmail("");
-    setPassword("");
-    setName("");
-    setConfirmpw("");
+        message.showMessage("Error, please try again", "fail");
+        setLoading(false);
+      })
+      .finally(() => dispatch(setUserInfo(name)));
     event.preventDefault();
   };
   const validate = (
@@ -186,7 +202,7 @@ const SignUpPage = () => {
               errors.confirmpw.length
           )}
         >
-          SIGN UP
+          {loading ? "..." : "SIGN UP"}
         </button>
       </form>
     </div>

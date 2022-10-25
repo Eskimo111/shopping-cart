@@ -5,7 +5,6 @@ const Message = (props: {
   type: "success" | "fail";
   showing: boolean;
 }) => {
-  console.log("message rendered!!");
   return (
     <div
       className={`fixed top-16 left-1/2 -translate-x-1/2 ${

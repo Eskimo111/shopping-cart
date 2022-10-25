@@ -99,7 +99,7 @@ const OwnerProductPage = () => {
         message.showMessage("Changes saved", "success");
       })
       .catch(() => {
-        message.showMessage("Error. Try again!", "failed");
+        message.showMessage("Error. Try again!", "fail");
       });
   };
 

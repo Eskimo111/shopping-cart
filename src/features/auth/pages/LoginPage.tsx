@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import BackButton from "../../../components/button/BackButton";
 import { useAppDispatch } from "../../../hooks/use-app-dispatch";
 import useMessage from "../../../hooks/use-message";
-import { login } from "../../../slices/user";
+import { getUserInfo, login } from "../../../slices/user";
 
 const logo = require("../../../asset/logo192.png");
 
@@ -30,15 +30,16 @@ const LoginPage = () => {
     dispatch(login({ email: email, password: password }))
       .unwrap()
       .then(() => {
-        setTimeout(() => navigate("/"), 1000);
+        //setTimeout(() => navigate("/"), 1000);
         message.showMessage(`Login success`, "success");
       })
       .catch(() => {
         message.showMessage(
           "Error. Can't send email, please try again",
-          "failed"
+          "fail"
         );
-      });
+      })
+      .finally(() => dispatch(getUserInfo()));
     setEmail("");
     setPassword("");
     event.preventDefault();

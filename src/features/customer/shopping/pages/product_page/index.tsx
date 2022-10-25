@@ -19,14 +19,15 @@ const ProductPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchProductById(productId!)
-      .then((result) => {
-        setProduct(result);
-        setLoading(false);
-      })
-      .catch((reject) => {
-        setLoading(false);
-      });
+    if (productId)
+      fetchProductById(productId)
+        .then((result) => {
+          setProduct(result);
+          setLoading(false);
+        })
+        .catch((reject) => {
+          setLoading(false);
+        });
   }, []);
 
   return (
@@ -67,8 +68,8 @@ const ProductPage = () => {
             <div className="my-3">
               <p className="text-lg">Select Size</p>
               <div className="flex flex-wrap gap-2">
-                {product.variant_groups![0] &&
-                  product.variant_groups![0].options.map((size, index) => (
+                {product.variant_groups &&
+                  product.variant_groups[0].options.map((size, index) => (
                     <div
                       key={index}
                       onClick={() => setSizeSelected(index)}
@@ -103,7 +104,7 @@ const ProductPage = () => {
                       );
                     })
                     .catch(() => {
-                      messenger.showMessage(`Error. Try again!`, "failed");
+                      messenger.showMessage(`Error. Try again!`, "fail");
                     })
                 }
               >

@@ -5,8 +5,10 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../../../hooks/use-app-dispatch";
 import useMessage from "../../../hooks/use-message";
-import { login, setUserInfo, signup } from "../../../slices/user";
+import { logIn, setUserInfo, signUp } from "../../../slices/user";
 import "./SignUp.less";
+import { createCartAsync } from "../../../slices/cart";
+import useAuth from "../../../hooks/use-auth";
 
 const logo = require("../../../asset/logo192.png");
 
@@ -20,6 +22,8 @@ const antIcon = (
 );
 
 const SignUpPage = () => {
+  const { signup } = useAuth();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -81,21 +85,7 @@ const SignUpPage = () => {
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     setLoading(true);
-    dispatch(signup({ email: email, password: password }))
-      .unwrap()
-      .then(() => {
-        message.showMessage(
-          `Sign up successfully. You can log in now.`,
-          "success"
-        );
-        setLoading(false);
-        //setTimeout(() => navigate("/"), 1000);
-      })
-      .catch(() => {
-        message.showMessage("Error, please try again", "fail");
-        setLoading(false);
-      })
-      .finally(() => dispatch(setUserInfo(name)));
+    signup(email, password, name).finally(() => setLoading(false));
     event.preventDefault();
   };
   const validate = (

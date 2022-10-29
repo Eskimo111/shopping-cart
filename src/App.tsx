@@ -18,8 +18,9 @@ function App() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (getCookie("cart_id")) {
-      dispatch(loadCartAsync());
+    const cart_id = getCookie("cart_id");
+    if (cart_id) {
+      dispatch(loadCartAsync(cart_id));
     } else {
       dispatch(createCartAsync());
     }

@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAvZZ0qM6Fp64DqBy8yDygQo5dgfE1IOJc",
@@ -24,8 +25,15 @@ initializeApp(firebaseConfig);
 //init services
 const auth = getAuth();
 
+const getAppDatabase = () =>
+  getDatabase(
+    undefined,
+    "https://test-login-cdb8c-default-rtdb.asia-southeast1.firebasedatabase.app"
+  );
+
 export {
   auth,
+  getAppDatabase,
   createUserWithEmailAndPassword,
   updateProfile,
   onAuthStateChanged,

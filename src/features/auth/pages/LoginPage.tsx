@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import BackButton from "../../../components/button/BackButton";
 import { useAppDispatch } from "../../../hooks/use-app-dispatch";
+import useAuth from "../../../hooks/use-auth";
 import useMessage from "../../../hooks/use-message";
-import { getUserInfo, login } from "../../../slices/user";
+import { loadCartAsync } from "../../../slices/cart";
+import { getUserInfo } from "../../../slices/user";
 
 const logo = require("../../../asset/logo192.png");
 
 const LoginPage = () => {
+  const { login, logout } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
@@ -27,19 +30,7 @@ const LoginPage = () => {
   };
 
   const handleSubmit = (event: React.SyntheticEvent) => {
-    dispatch(login({ email: email, password: password }))
-      .unwrap()
-      .then(() => {
-        //setTimeout(() => navigate("/"), 1000);
-        message.showMessage(`Login success`, "success");
-      })
-      .catch(() => {
-        message.showMessage(
-          "Error. Can't send email, please try again",
-          "fail"
-        );
-      })
-      .finally(() => dispatch(getUserInfo()));
+    login(email, password, true);
     setEmail("");
     setPassword("");
     event.preventDefault();
@@ -92,6 +83,9 @@ const LoginPage = () => {
             Sign Up
           </Link>
         </p>
+        <button type="button" onClick={() => logout()}>
+          Log out
+        </button>
       </form>
     </div>
   );

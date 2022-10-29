@@ -6,8 +6,8 @@ import {
 } from "@reduxjs/toolkit";
 import cartService from "../utils/customer_services/cart.service";
 
-import { getCookie, setCookie } from "../store/cookie";
 import { Cart } from "../models/cart";
+import { RootState } from "../store/store";
 
 const initialState: Cart = {
   id: "",
@@ -25,8 +25,7 @@ const initialState: Cart = {
 };
 export const loadCartAsync = createAsyncThunk(
   "cart/load",
-  async (): Promise<Cart> => {
-    const id = getCookie("cart_id");
+  async (id: string): Promise<Cart> => {
     if (!id) return initialState;
     const response = await cartService.loadCart(id);
     return response as any as Cart;
@@ -43,7 +42,8 @@ export const createCartAsync = createAsyncThunk(
 
 export const deleteCartAsync = createAsyncThunk(
   "cart/delete",
-  async (cart_id: string): Promise<Cart> => {
+  async (no_arg, { getState }): Promise<Cart> => {
+    const cart_id = (getState() as RootState).cart.id;
     const response = await cartService.deleteCart(cart_id);
     return response as any as Cart;
   }
@@ -51,13 +51,16 @@ export const deleteCartAsync = createAsyncThunk(
 
 export const addToCartAsync = createAsyncThunk(
   "cart/addToCart",
-  async (input: {
-    id: string;
-    quantity: number;
-    variant_id: string;
-    option_id: string;
-  }): Promise<Cart> => {
-    const id = getCookie("cart_id")!;
+  async (
+    input: {
+      id: string;
+      quantity: number;
+      variant_id: string;
+      option_id: string;
+    },
+    { getState }
+  ) => {
+    const id = (getState() as RootState).cart.id;
     const formattedInput = {
       id: input.id,
       quantity: input.quantity,
@@ -70,8 +73,8 @@ export const addToCartAsync = createAsyncThunk(
 
 export const removeFromCartAsync = createAsyncThunk(
   "cart/removeFromCart",
-  async (id: string): Promise<Cart> => {
-    const cart_id = getCookie("cart_id")!;
+  async (id: string, { getState }): Promise<Cart> => {
+    const cart_id = (getState() as RootState).cart.id;
     const response = await cartService.removeFromCart(id, cart_id);
     //After remove, reload cart so the navbar show number of item
     return response as any as Cart;
@@ -80,8 +83,8 @@ export const removeFromCartAsync = createAsyncThunk(
 
 export const updateCartAsync = createAsyncThunk(
   "cart/updateCart",
-  async (input: { line_id: string; quantity: number }) => {
-    const cart_id = getCookie("cart_id");
+  async (input: { line_id: string; quantity: number }, { getState }) => {
+    const cart_id = (getState() as RootState).cart.id;
     if (!cart_id) return initialState;
     const response = await cartService.updateCart(
       input.line_id,
@@ -103,13 +106,12 @@ export const cartSlice = createSlice({
     builder
       .addCase(createCartAsync.fulfilled, (state, { payload }) => {
         const { id } = payload;
-        setCookie("cart_id", id, 30);
         console.log("create new cart");
         return { ...payload };
       })
       .addCase(loadCartAsync.fulfilled, (state, { payload }) => {
         const { id } = payload;
-        console.log("load cookie cart: " + id);
+        console.log("load cart: " + id);
         return payload;
       })
       .addCase(addToCartAsync.fulfilled, (state, { payload }) => payload)

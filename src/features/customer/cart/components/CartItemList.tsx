@@ -8,7 +8,7 @@ import { useAppSelector } from "../../../../hooks/use-app-selector";
 
 const CartItemList = () => {
   const dispatch = useAppDispatch();
-  const { id, line_items: lineItems } = useAppSelector(
+  const { line_items: lineItems } = useAppSelector(
     (state: RootState) => state.cart
   );
 
@@ -19,7 +19,7 @@ const CartItemList = () => {
         <button
           className="border border-black p-1 px-3 rounded-md h-fit"
           onClick={() => {
-            dispatch(deleteCartAsync(id));
+            dispatch(deleteCartAsync());
             dispatch(createCartAsync());
           }}
         >

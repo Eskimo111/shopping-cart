@@ -18,7 +18,7 @@ type UseAuth = {
   isAuthenticated: () => boolean;
   login: (email: string, password: string, remember: boolean) => Promise<void>;
   signup: (email: string, password: string, name: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   hasPermisssion: (url: string) => boolean;
 };
 
@@ -28,8 +28,10 @@ const getStorage = (key: string): string =>
 const useAuth = (): UseAuth => {
   const dispatch = useAppDispatch();
   const role = useAppSelector((state: RootState) => state.user.info.role);
+  const token = useAppSelector((state: RootState) => state.user.token);
+
   const isAuthenticated = useCallback((): boolean => {
-    const token = JSON.parse(getStorage("TOKEN"));
+    //const token = JSON.parse(getStorage("TOKEN"));
     if (token) return true;
     return false;
     //Dung token nay de lay thong tin nguoi dung vd: cart
@@ -40,10 +42,10 @@ const useAuth = (): UseAuth => {
     remember: boolean
   ): Promise<void> => {
     await dispatch(logIn({ email: email, password: password }));
-    /*if (remember) {
+    if (remember) {
       localStorage.setItem("EMAIL", email);
       localStorage.setItem("PASSWORD", password);
-    }*/
+    }
 
     dispatch(getUserInfo())
       .then((resolve) => {
@@ -56,13 +58,21 @@ const useAuth = (): UseAuth => {
     password: string,
     name: string
   ): Promise<void> => {
-    await dispatch(signUp({ email: email, password: password }));
-    dispatch(createCartAsync()).then(() => dispatch(setUserInfo(name)));
+    await dispatch(signUp({ email: email, password: password }))
+      .unwrap()
+      .then(() => {
+        console.log("sign up success");
+        dispatch(createCartAsync()).then(() => dispatch(setUserInfo(name)));
+      })
+      .catch((error) => {
+        throw error;
+      });
   };
-  const logout = () => {
-    auth.signOut();
+  const logout = async () => {
+    await auth.signOut();
     dispatch(logOut());
     const cookieCart = getCookie("cart_id");
+    localStorage.removeItem("TOKEN");
     if (cookieCart) dispatch(loadCartAsync(cookieCart));
   };
 

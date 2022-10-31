@@ -8,6 +8,8 @@ import cartService from "../utils/customer_services/cart.service";
 
 import { Cart } from "../models/cart";
 import { RootState } from "../store/store";
+import { useAppSelector } from "../hooks/use-app-selector";
+import { setCookie } from "../store/cookie";
 
 const initialState: Cart = {
   id: "",
@@ -39,6 +41,10 @@ export const createCartAsync = createAsyncThunk(
     return response as any as Cart;
   }
 );
+
+export const saveCartToCookies = (cart_id: string) => {
+  setCookie("cart_id", cart_id, 25);
+};
 
 export const deleteCartAsync = createAsyncThunk(
   "cart/delete",

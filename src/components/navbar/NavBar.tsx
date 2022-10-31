@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { RootState } from "../../store/store";
 import { BiUser } from "react-icons/bi";
 import { useAppSelector } from "../../hooks/use-app-selector";
+import UserButton from "./UserButton";
 const NavBar = () => {
   const [searchString, setSearchString] = useState("");
   const navigate = useNavigate();
@@ -68,9 +69,7 @@ const NavBar = () => {
               </span>
             </div>
           </Link>
-          <Link to="/login">
-            <BiUser size={24} />
-          </Link>
+          <UserButton></UserButton>
         </div>
       </div>
     </div>

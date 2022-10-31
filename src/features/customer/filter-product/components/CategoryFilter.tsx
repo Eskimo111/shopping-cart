@@ -1,15 +1,14 @@
 import { Checkbox, Radio, RadioChangeEvent } from "antd";
-import { CheckboxValueType } from "antd/lib/checkbox/Group";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import categoryApi from "../../../../utils/customer_services/category.service";
-import { RootState } from "../../../../store/store";
 import { setCategory, setPage } from "../../../../slices/filter";
 import { useAppDispatch } from "../../../../hooks/use-app-dispatch";
-import { useAppSelector } from "../../../../hooks/use-app-selector";
 import useMediaQuery from "../../../../hooks/use-media-query";
+import { Category } from "../../../../models/product";
+import "./CategoryFilter.less";
 
-const fetchCategories = async () => {
+const fetchCategories = async (): Promise<Category[]> => {
   const response = await categoryApi.getCategories();
   return response.data;
 };
@@ -17,15 +16,16 @@ const fetchCategories = async () => {
 const CategoryFilter = () => {
   const isBigDevice = useMediaQuery();
   const dispatch = useAppDispatch();
-  const [categoryList, setCategoryList] = useState([]);
-  const options = [] as any;
-  categoryList.forEach((category: any) => {
+  const [categoryList, setCategoryList] = useState<Category[]>([]);
+
+  const options: { label: string; value: string }[] = [];
+  categoryList.forEach((category) => {
     options.push({ label: category.name, value: category.slug });
   });
   useEffect(() => {
     fetchCategories()
       .then((result) => {
-        setCategoryList(result as any);
+        setCategoryList(result);
       })
       .catch((error) => {
         console.log(error);

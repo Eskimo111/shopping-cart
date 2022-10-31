@@ -9,6 +9,10 @@ import { logIn, setUserInfo, signUp } from "../../../slices/user";
 import "./SignUp.less";
 import { createCartAsync } from "../../../slices/cart";
 import useAuth from "../../../hooks/use-auth";
+import { useAppSelector } from "../../../hooks/use-app-selector";
+import { RootState } from "../../../store/store";
+import LoadingSpinner from "../../../components/loading-spinner/LoadingSpinner";
+import { FirebaseError } from "firebase/app";
 
 const logo = require("../../../asset/logo192.png");
 
@@ -28,7 +32,7 @@ const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpw, setConfirmpw] = useState("");
-  const [loading, setLoading] = useState(false);
+  const loading = useAppSelector((state: RootState) => state.user.userLoading);
 
   const [touched, setTouched] = useState({
     name: false,
@@ -84,8 +88,17 @@ const SignUpPage = () => {
   }, [touched, name, email, password, confirmpw]);
 
   const handleSubmit = (event: React.SyntheticEvent) => {
-    setLoading(true);
-    signup(email, password, name).finally(() => setLoading(false));
+    signup(email, password, name)
+      .then(() =>
+        message.showMessage("You have successfully sign up", "success")
+      )
+      .catch((error: FirebaseError) => {
+        console.log(
+          "🚀 ~ file: SignUpPage.tsx ~ line 95 ~ handleSubmit ~ error",
+          error
+        );
+        return message.showMessage(error.message, "fail");
+      });
     event.preventDefault();
   };
   const validate = (
@@ -127,74 +140,78 @@ const SignUpPage = () => {
         If email address exists in our system, we'll send you a link to continue
         logging in!
       </div>*/}
-      <form
-        className="flex flex-col items-center gap-4 w-3/4"
-        onSubmit={(e) => handleSubmit(e)}
-      >
-        <div className="input__container">
-          <input
-            className="border border-gray-300 rounded-lg"
-            type="text"
-            placeholder="Full name"
-            name="name"
-            value={name}
-            onChange={(e) => handleInputChange(e)}
-            onBlur={(e) => handleBlur(e)}
-            required
-          />
-          <p>{errors.name}</p>
-        </div>
-        <div className="input__container">
-          <input
-            className="border border-gray-300 rounded-lg"
-            type="text"
-            placeholder="Email address"
-            name="email"
-            value={email}
-            onChange={(e) => handleInputChange(e)}
-            onBlur={(e) => handleBlur(e)}
-            required
-          />
-          <p>{errors.email}</p>
-        </div>
-        <div className="input__container">
-          <input
-            className="border border-gray-300 rounded-lg"
-            type="password"
-            placeholder="Password"
-            name="password"
-            value={password}
-            onChange={(e) => handleInputChange(e)}
-            onBlur={(e) => handleBlur(e)}
-            required
-          />
-          <p>{errors.password}</p>
-        </div>
-        <div className="input__container">
-          <input
-            className="border border-gray-300 rounded-lg"
-            type="password"
-            placeholder="Confirm Password"
-            name="comfirmpw"
-            value={confirmpw}
-            onChange={(e) => handleInputChange(e)}
-            onBlur={(e) => handleBlur(e)}
-            required
-          />
-          <p>{errors.confirmpw}</p>
-        </div>
-        <button
-          className="btn-primary w-full py-2 font-semibold"
-          disabled={Boolean(
-            errors.name.length ||
-              errors.email.length ||
-              errors.password.length ||
-              errors.confirmpw.length
-          )}
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <form
+          className="flex flex-col items-center gap-4 w-3/4"
+          onSubmit={(e) => handleSubmit(e)}
         >
-          {loading ? "..." : "SIGN UP"}
-        </button>
-      </form>
+          <div className="input__container">
+            <input
+              className="border border-gray-300 rounded-lg"
+              type="text"
+              placeholder="Full name"
+              name="name"
+              value={name}
+              onChange={(e) => handleInputChange(e)}
+              onBlur={(e) => handleBlur(e)}
+              required
+            />
+            <p>{errors.name}</p>
+          </div>
+          <div className="input__container">
+            <input
+              className="border border-gray-300 rounded-lg"
+              type="text"
+              placeholder="Email address"
+              name="email"
+              value={email}
+              onChange={(e) => handleInputChange(e)}
+              onBlur={(e) => handleBlur(e)}
+              required
+            />
+            <p>{errors.email}</p>
+          </div>
+          <div className="input__container">
+            <input
+              className="border border-gray-300 rounded-lg"
+              type="password"
+              placeholder="Password"
+              name="password"
+              value={password}
+              onChange={(e) => handleInputChange(e)}
+              onBlur={(e) => handleBlur(e)}
+              required
+            />
+            <p>{errors.password}</p>
+          </div>
+          <div className="input__container">
+            <input
+              className="border border-gray-300 rounded-lg"
+              type="password"
+              placeholder="Confirm Password"
+              name="comfirmpw"
+              value={confirmpw}
+              onChange={(e) => handleInputChange(e)}
+              onBlur={(e) => handleBlur(e)}
+              required
+            />
+            <p>{errors.confirmpw}</p>
+          </div>
+          <button
+            className="btn-primary w-full py-2 font-semibold"
+            disabled={Boolean(
+              errors.name.length ||
+                errors.email.length ||
+                errors.password.length ||
+                errors.confirmpw.length
+            )}
+          >
+            SIGN UP
+          </button>
+        </form>
+      )}
     </div>
   );
 };

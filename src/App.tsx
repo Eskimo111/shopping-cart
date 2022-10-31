@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 import { getCookie } from "./store/cookie";
-import { createCartAsync, loadCartAsync } from "./slices/cart";
+import {
+  createCartAsync,
+  loadCartAsync,
+  saveCartToCookies,
+} from "./slices/cart";
 import { useAppDispatch } from "./hooks/use-app-dispatch";
 import AppRouter from "./routers/AppRouter";
 import useMessage from "./hooks/use-message";
@@ -13,7 +17,6 @@ import { useLocation } from "react-router-dom";
 function App() {
   const dispatch = useAppDispatch();
   const message = useMessage();
-  const { token } = useAppSelector((state: RootState) => state.user);
   const location = useLocation();
 
   useEffect(() => {
@@ -22,7 +25,9 @@ function App() {
     if (cart_id) {
       dispatch(loadCartAsync(cart_id));
     } else {
-      dispatch(createCartAsync());
+      dispatch(createCartAsync()).then((resolve: any) => {
+        saveCartToCookies(resolve.payload.id);
+      });
     }
   }, []);
   //useEffect(() => {

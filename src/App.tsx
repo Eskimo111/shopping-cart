@@ -8,8 +8,6 @@ import {
 import { useAppDispatch } from "./hooks/use-app-dispatch";
 import AppRouter from "./routers/AppRouter";
 import useMessage from "./hooks/use-message";
-import { RootState } from "./store/store";
-import { useAppSelector } from "./hooks/use-app-selector";
 import { isHideHeader } from "./routers/layout-config";
 import NavBar from "./components/navbar/NavBar";
 import { useLocation } from "react-router-dom";
@@ -18,16 +16,23 @@ function App() {
   const dispatch = useAppDispatch();
   const message = useMessage();
   const location = useLocation();
-
   useEffect(() => {
     window.scrollTo(0, 0);
-    const cart_id = getCookie("cart_id");
-    if (cart_id) {
-      dispatch(loadCartAsync(cart_id));
-    } else {
-      dispatch(createCartAsync()).then((resolve: any) => {
-        saveCartToCookies(resolve.payload.id);
-      });
+    let token = localStorage.getItem("TOKEN");
+    if (token) {
+      token = JSON.parse(token).value;
+    }
+    console.log("🚀 ~ file: App.tsx ~ line 30 ~ useEffect ~ auth.currentUser");
+    //if (token) auth.signinWithToken(token);
+    {
+      const cart_id = getCookie("cart_id");
+      if (cart_id) {
+        dispatch(loadCartAsync(cart_id));
+      } else {
+        dispatch(createCartAsync()).then((resolve: any) => {
+          saveCartToCookies(resolve.payload.id);
+        });
+      }
     }
   }, []);
   //useEffect(() => {

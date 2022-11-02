@@ -1,12 +1,16 @@
+import { FirebaseError } from "firebase/app";
+import { signInWithCustomToken } from "firebase/auth";
 import path, { resolve } from "path";
 import { useCallback } from "react";
 import { auth } from "../firebase";
 import { createCartAsync, loadCartAsync } from "../slices/cart";
 import {
   getUserInfo,
-  logIn,
   logOut,
   setUserInfo,
+  signIn,
+  signInWithGoogle,
+  signInWithToken,
   signUp,
 } from "../slices/user";
 import { getCookie } from "../store/cookie";
@@ -16,7 +20,9 @@ import { useAppSelector } from "./use-app-selector";
 
 type UseAuth = {
   isAuthenticated: () => boolean;
-  login: (email: string, password: string, remember: boolean) => Promise<void>;
+  signin: (email: string, password: string, remember: boolean) => Promise<void>;
+  signinWithToken: (token: string) => Promise<void>;
+  signinWithGoogle: () => Promise<void>;
   signup: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
   hasPermisssion: (url: string) => boolean;
@@ -36,23 +42,72 @@ const useAuth = (): UseAuth => {
     return false;
     //Dung token nay de lay thong tin nguoi dung vd: cart
   }, [dispatch]);
-  const login = async (
+
+  const signin = async (
     email: string,
     password: string,
     remember: boolean
   ): Promise<void> => {
-    await dispatch(logIn({ email: email, password: password }));
-    if (remember) {
-      localStorage.setItem("EMAIL", email);
-      localStorage.setItem("PASSWORD", password);
-    }
-
-    dispatch(getUserInfo())
+    await dispatch(signIn({ email: email, password: password }))
+      .unwrap()
       .then((resolve) => {
-        return dispatch(loadCartAsync(resolve.payload.cart_id));
+        if (remember) {
+          const tokenObject = { value: resolve.token, timeStamps: Date.now() };
+          localStorage.setItem("TOKEN", JSON.stringify(tokenObject));
+        }
+        dispatch(getUserInfo())
+          .unwrap()
+          .then((resolve) => {
+            return dispatch(loadCartAsync(resolve.cart_id!));
+          })
+          .catch((error) => console.log(error));
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        throw error;
+      });
   };
+
+  const signinWithToken = async (token: string): Promise<void> => {
+    await dispatch(signInWithToken(token))
+      .unwrap()
+      .then((resolve) => {
+        console.log("success");
+        dispatch(getUserInfo())
+          .unwrap()
+          .then((resolve) => {
+            return dispatch(loadCartAsync(resolve.cart_id!));
+          })
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+
+  const signinWithGoogle = async (): Promise<void> => {
+    await dispatch(signInWithGoogle())
+      .unwrap()
+      .then((resolve) => {
+        dispatch(getUserInfo())
+          .unwrap()
+          .then((resolve) => {
+            console.log("Sign in with Google: Get User Info Success");
+            return dispatch(loadCartAsync(resolve.cart_id!));
+          })
+          .catch(() => {
+            console.log(
+              "Sign in with Google: Get User Info Fail, set userinfo instead"
+            );
+            dispatch(createCartAsync()).then(() =>
+              dispatch(setUserInfo(resolve.displayName ?? "Anonymous"))
+            );
+          });
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+
   const signup = async (
     email: string,
     password: string,
@@ -64,7 +119,7 @@ const useAuth = (): UseAuth => {
         console.log("sign up success");
         dispatch(createCartAsync()).then(() => dispatch(setUserInfo(name)));
       })
-      .catch((error) => {
+      .catch((error: FirebaseError) => {
         throw error;
       });
   };
@@ -81,7 +136,15 @@ const useAuth = (): UseAuth => {
     if (pathname === "owner" && role !== "AD") return false;
     return true;
   };
-  return { isAuthenticated, login, signup, logout, hasPermisssion };
+  return {
+    isAuthenticated,
+    signin,
+    signinWithGoogle,
+    signinWithToken,
+    signup,
+    logout,
+    hasPermisssion,
+  };
 };
 
 export default useAuth;

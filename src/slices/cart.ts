@@ -8,7 +8,6 @@ import cartService from "../utils/customer_services/cart.service";
 
 import { Cart } from "../models/cart";
 import { RootState } from "../store/store";
-import { useAppSelector } from "../hooks/use-app-selector";
 import { setCookie } from "../store/cookie";
 
 const initialState: Cart = {
@@ -65,7 +64,7 @@ export const addToCartAsync = createAsyncThunk(
       option_id: string;
     },
     { getState }
-  ) => {
+  ): Promise<Cart> => {
     const id = (getState() as RootState).cart.id;
     const formattedInput = {
       id: input.id,
@@ -82,14 +81,16 @@ export const removeFromCartAsync = createAsyncThunk(
   async (id: string, { getState }): Promise<Cart> => {
     const cart_id = (getState() as RootState).cart.id;
     const response = await cartService.removeFromCart(id, cart_id);
-    //After remove, reload cart so the navbar show number of item
     return response as any as Cart;
   }
 );
 
 export const updateCartAsync = createAsyncThunk(
   "cart/updateCart",
-  async (input: { line_id: string; quantity: number }, { getState }) => {
+  async (
+    input: { line_id: string; quantity: number },
+    { getState }
+  ): Promise<Cart> => {
     const cart_id = (getState() as RootState).cart.id;
     if (!cart_id) return initialState;
     const response = await cartService.updateCart(
@@ -112,8 +113,8 @@ export const cartSlice = createSlice({
     builder
       .addCase(createCartAsync.fulfilled, (state, { payload }) => {
         const { id } = payload;
-        console.log("create new cart");
-        return { ...payload };
+        console.log("create new cart: " + id);
+        return payload;
       })
       .addCase(loadCartAsync.fulfilled, (state, { payload }) => {
         const { id } = payload;

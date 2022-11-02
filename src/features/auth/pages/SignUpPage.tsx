@@ -1,13 +1,9 @@
-import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import { BsThreeDots } from "react-icons/bs";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../../../hooks/use-app-dispatch";
 import useMessage from "../../../hooks/use-message";
-import { logIn, setUserInfo, signUp } from "../../../slices/user";
 import "./SignUp.less";
-import { createCartAsync } from "../../../slices/cart";
 import useAuth from "../../../hooks/use-auth";
 import { useAppSelector } from "../../../hooks/use-app-selector";
 import { RootState } from "../../../store/store";
@@ -93,10 +89,6 @@ const SignUpPage = () => {
         message.showMessage("You have successfully sign up", "success")
       )
       .catch((error: FirebaseError) => {
-        console.log(
-          "🚀 ~ file: SignUpPage.tsx ~ line 95 ~ handleSubmit ~ error",
-          error
-        );
         return message.showMessage(error.message, "fail");
       });
     event.preventDefault();

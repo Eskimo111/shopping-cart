@@ -1,14 +1,10 @@
 import { FirebaseError } from "firebase/app";
 import React, { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import BackButton from "../../../components/button/BackButton";
+import { Link, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../../components/loading-spinner/LoadingSpinner";
-import { useAppDispatch } from "../../../hooks/use-app-dispatch";
 import { useAppSelector } from "../../../hooks/use-app-selector";
 import useAuth from "../../../hooks/use-auth";
 import useMessage from "../../../hooks/use-message";
-import { loadCartAsync } from "../../../slices/cart";
-import { getUserInfo } from "../../../slices/user";
 import { RootState } from "../../../store/store";
 import SignInWithGoogleButton from "./SignInWithGoogleButton";
 

@@ -1,6 +1,4 @@
 import { FirebaseError } from "firebase/app";
-import { signInWithCustomToken } from "firebase/auth";
-import path, { resolve } from "path";
 import { useCallback } from "react";
 import { auth } from "../firebase";
 import { createCartAsync, loadCartAsync } from "../slices/cart";
@@ -132,8 +130,9 @@ const useAuth = (): UseAuth => {
   };
 
   const hasPermisssion = (url: string): boolean => {
-    const pathname = url.split("/")[0];
+    const pathname = url.split("/")[1];
     if (pathname === "owner" && role !== "AD") return false;
+
     return true;
   };
   return {

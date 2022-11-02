@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import ConstructPage from "../components/construct/Construct";
 import NavBar from "../components/navbar/NavBar";
+import RestrictedPage from "../components/restricted/Restricted";
 import LoginPage from "../features/auth/pages/LoginPage";
 import SignUpPage from "../features/auth/pages/SignUpPage";
 import CartPage from "../features/customer/cart";
@@ -11,8 +12,11 @@ import SearchPage from "../features/customer/shopping/pages/search_page";
 import OwnerPage from "../features/owner";
 import ManageProductPage from "../features/owner/owner_products";
 import OwnerProductPage from "../features/owner/owner_products/pages/edit-product";
+import useAuth from "../hooks/use-auth";
 
 const AppRouter = () => {
+  const auth = useAuth();
+  const location = useLocation();
   return (
     <Routes>
       <Route path="/" element={<ShoppingPage />}></Route>
@@ -25,15 +29,19 @@ const AppRouter = () => {
       <Route path="/search" element={<SearchPage />}></Route>
       <Route path="/login" element={<LoginPage />}></Route>
       <Route path="/signup" element={<SignUpPage />}></Route>
-
-      <Route path="/user/:token" element={<LoginPage />}></Route>
       <Route path="/owner">
-        <Route index element={<OwnerPage />}></Route>
-        <Route path="products">
-          <Route index element={<ManageProductPage />}></Route>
-          <Route path=":productId" element={<OwnerProductPage />}></Route>
-        </Route>
-        <Route path="*" element={<ConstructPage />}></Route>
+        {auth.hasPermisssion(location.pathname) ? (
+          <>
+            <Route index element={<OwnerPage />}></Route>
+            <Route path="products">
+              <Route index element={<ManageProductPage />}></Route>
+              <Route path=":productId" element={<OwnerProductPage />}></Route>
+            </Route>
+            <Route path="*" element={<ConstructPage />}></Route>
+          </>
+        ) : (
+          <Route index element={<RestrictedPage />}></Route>
+        )}
       </Route>
       <Route path="*" element={<ShoppingPage />}></Route>
     </Routes>

@@ -13,7 +13,6 @@ import {
   User,
 } from "../models/user";
 import { RootState } from "../store/store";
-import { UserInfo } from "os";
 import {
   GoogleAuthProvider,
   signInWithCustomToken,
@@ -128,11 +127,8 @@ export const getUserInfo = createAsyncThunk(
   "user/getInfo",
   async (no_arg, { getState }): Promise<FireBaseUserData> => {
     const { id } = (getState() as RootState).user.info;
-    console.log("🚀 ~ file: user.ts ~ line 89 ~ id", id);
     const dbRef = ref(getAppDatabase());
     const response = await (await get(child(dbRef, `users/${id}`))).val();
-    console.log("🚀 ~ file: user.ts ~ line 91 ~ response", response);
-
     if (!response) throw "Error. Can't get user info from Realtime Database.";
     return response;
   }

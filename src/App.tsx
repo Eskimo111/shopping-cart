@@ -18,12 +18,11 @@ function App() {
   const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
-    let token = localStorage.getItem("TOKEN");
+    /*let token = localStorage.getItem("TOKEN");
     if (token) {
       token = JSON.parse(token).value;
     }
-    console.log("🚀 ~ file: App.tsx ~ line 30 ~ useEffect ~ auth.currentUser");
-    //if (token) auth.signinWithToken(token);
+    //if (token) auth.signinWithToken(token);*/
     {
       const cart_id = getCookie("cart_id");
       if (cart_id) {
@@ -35,9 +34,6 @@ function App() {
       }
     }
   }, []);
-  //useEffect(() => {
-  //message.showMessage("Login success", "success");
-  //}, [token]);
   return (
     <>
       {isHideHeader(location.pathname) || <NavBar />}

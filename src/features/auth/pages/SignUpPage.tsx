@@ -1,25 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { LoadingOutlined } from "@ant-design/icons";
-import { useAppDispatch } from "../../../hooks/use-app-dispatch";
+import { Link, useNavigate } from "react-router-dom";
 import useMessage from "../../../hooks/use-message";
-import "./SignUp.less";
 import useAuth from "../../../hooks/use-auth";
 import { useAppSelector } from "../../../hooks/use-app-selector";
 import { RootState } from "../../../store/store";
 import LoadingSpinner from "../../../components/loading-spinner/LoadingSpinner";
 import { FirebaseError } from "firebase/app";
+import "./SignUp.less";
 
 const logo = require("../../../asset/logo192.png");
-
-const antIcon = (
-  <LoadingOutlined
-    style={{
-      fontSize: 14,
-    }}
-    spin
-  />
-);
 
 const SignUpPage = () => {
   const { signup } = useAuth();
@@ -44,7 +33,6 @@ const SignUpPage = () => {
     confirmpw: "",
   });
 
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const message = useMessage();
 
@@ -85,9 +73,10 @@ const SignUpPage = () => {
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     signup(email, password, name)
-      .then(() =>
-        message.showMessage("You have successfully sign up", "success")
-      )
+      .then(() => {
+        setTimeout(() => navigate("/"), 500);
+        message.showMessage("You have successfully sign up", "success");
+      })
       .catch((error: FirebaseError) => {
         return message.showMessage(error.message, "fail");
       });

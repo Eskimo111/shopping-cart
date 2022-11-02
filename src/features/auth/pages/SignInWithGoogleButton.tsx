@@ -1,11 +1,7 @@
 import { FirebaseError } from "firebase/app";
-import React from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../../hooks/use-app-dispatch";
 import useAuth from "../../../hooks/use-auth";
 import useMessage from "../../../hooks/use-message";
-import { signInWithGoogle } from "../../../slices/user";
 
 const SignInWithGoogleButton = () => {
   const auth = useAuth();

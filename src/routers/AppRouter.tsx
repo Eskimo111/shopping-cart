@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import ConstructPage from "../components/construct/Construct";
-import NavBar from "../components/navbar/NavBar";
 import RestrictedPage from "../components/restricted/Restricted";
 import LoginPage from "../features/auth/pages/LoginPage";
 import SignUpPage from "../features/auth/pages/SignUpPage";
